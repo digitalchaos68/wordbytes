@@ -49,24 +49,6 @@ const KEYS = [
   'ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'
 ];
 
-// Render keyboard
-KEYS.forEach(key => {
-  const button = document.createElement("div");
-  button.classList.add("key");
-  if (key === "ENTER") button.classList.add("enter");
-  if (key === "⌫") button.classList.add("backspace");
-  button.textContent = key;
-  button.addEventListener("click", () => onKeyClick(key));
-  keyboard.appendChild(button);
-});
-
-// Enable/disable Submit button based on input
-function updateSubmitButton() {
-  const submitBtn = document.getElementById("submit-btn");
-  submitBtn.disabled = currentGuess.length !== WORD_LENGTH;
-}
-
-
 function onKeyClick(key) {
   if (gameOver) return;
 
@@ -139,17 +121,6 @@ function checkGuess() {
   currentRow++;
   currentGuess = "";
 }
-
-// === Submit Button Logic ===
-const submitBtn = document.getElementById("submit-btn");
-
-submitBtn.addEventListener("click", () => {
-  if (currentGuess.length !== WORD_LENGTH) {
-    flashMessage("Not enough letters!");
-    return;
-  }
-  checkGuess();
-});
 
 function updateStreak() {
   streakEl.textContent = `Streak: ${streak} 🔥`;
