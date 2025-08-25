@@ -116,6 +116,41 @@ h1 {
 .legend .present { background: #f9c543; }
 .legend .absent { background: #8c8c8c; }
 
+.legend-container {
+  margin: 10px auto;
+  max-width: 300px;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.legend-toggle {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #2d7dff;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.legend-content {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.legend-box {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  border-radius: 4px;
+}
+
+.legend .correct { background: #2d7dff; }
+.legend .present { background: #f9c543; }
+.legend .absent { background: #8c8c8c; }
+
 /* Keyboard */
 .keyboard {
   display: grid;

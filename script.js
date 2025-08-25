@@ -54,6 +54,14 @@ KEYS.forEach(key => {
   keyboard.appendChild(button);
 });
 
+
+// Enable/disable Submit button based on input
+function updateSubmitButton() {
+  const submitBtn = document.getElementById("submit-btn");
+  submitBtn.disabled = currentGuess.length !== WORD_LENGTH;
+}
+
+
 function onKeyClick(key) {
   if (gameOver) return;
 
@@ -78,12 +86,6 @@ function onKeyClick(key) {
 }
 
 
-
-// Enable/disable Submit button based on input
-function updateSubmitButton() {
-  const submitBtn = document.getElementById("submit-btn");
-  submitBtn.disabled = currentGuess.length !== WORD_LENGTH;
-}
 
 // Call it every time the guess changes
 document.addEventListener("keydown", () => {
@@ -152,6 +154,17 @@ function checkGuess() {
   currentRow++;
   currentGuess = "";
 }
+
+// === Submit Button Logic ===
+const submitBtn = document.getElementById("submit-btn");
+
+submitBtn.addEventListener("click", () => {
+  if (currentGuess.length !== WORD_LENGTH) {
+    flashMessage("Not enough letters!");
+    return;
+  }
+  checkGuess();
+});
 
 function updateStreak() {
   streakEl.textContent = `Streak: ${streak} 🔥`;
