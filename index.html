@@ -20,13 +20,7 @@
 
     <div id="gameboard"></div>
 
-    <!-- Collapsible Legend -->
-    <div class="legend-container">
-      <button id="legend-toggle" class="legend-toggle" aria-expanded="true">
-        🎯 Color Guide (Tap to hide)
-      </button>
 
-    </div>
 
     <div class="keyboard" id="keyboard"></div>
 
@@ -42,11 +36,18 @@
     </div>
 
     <p class="streak" id="streak">Streak: 0 🔥</p>
+
+        <!-- Collapsible Legend -->
+    <div class="legend-container">
+      <button id="legend-toggle" class="legend-toggle" aria-expanded="true">
+        🎯 Color Guide (Tap to hide)
+      </button>
       <div id="legend-content" class="legend-content">
         <p><span class="legend-box correct"></span> = Correct letter, correct position</p>
         <p><span class="legend-box present"></span> = Correct letter, wrong position</p>
         <p><span class="legend-box absent"></span> = Not in the word</p>
       </div>
+    </div>
   </div>
 
   <!-- How to Play Modal -->
