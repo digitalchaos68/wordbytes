@@ -74,7 +74,35 @@ function onKeyClick(key) {
     currentGuess += key;
     letters[currentGuess.length - 1].textContent = key;
   }
+  updateSubmitButton();
 }
+
+
+
+// Enable/disable Submit button based on input
+function updateSubmitButton() {
+  const submitBtn = document.getElementById("submit-btn");
+  submitBtn.disabled = currentGuess.length !== WORD_LENGTH;
+}
+
+// Call it every time the guess changes
+document.addEventListener("keydown", () => {
+  updateSubmitButton();
+});
+
+// Also call it when typing via keyboard
+KEYS.forEach(key => {
+  const button = document.createElement("div");
+  button.classList.add("key");
+  button.textContent = key;
+  button.addEventListener("click", () => {
+    onKeyClick(key);
+    updateSubmitButton(); // Update button state
+  });
+  keyboard.appendChild(button);
+});
+
+
 
 function checkGuess() {
   const rows = gameboard.children;
@@ -181,3 +209,43 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('SW registration failed: ', err));
   });
 }
+// === How to Play Modal ===
+const helpBtn = document.getElementById("help-btn");
+const helpModal = document.getElementById("help-modal");
+const closeModal = document.getElementById("close-modal");
+
+// Show modal on first visit only
+if (!localStorage.getItem("wordBytesSeenHelp")) {
+  helpModal.style.display = "flex";
+  localStorage.setItem("wordBytesSeenHelp", "true");
+}
+
+helpBtn.addEventListener("click", () => {
+  helpModal.style.display = "flex";
+});
+
+closeModal.addEventListener("click", () => {
+  helpModal.style.display = "none";
+});
+
+// Close modal if clicked outside
+window.addEventListener("click", (e) => {
+  if (e.target === helpModal) {
+    helpModal.style.display = "none";
+  }
+});
+
+// === Collapsible Legend ===
+const legendToggle = document.getElementById("legend-toggle");
+const legendContent = document.getElementById("legend-content");
+
+legendToggle.addEventListener("click", () => {
+  const isExpanded = legendToggle.getAttribute("aria-expanded") === "true";
+  legendContent.style.display = isExpanded ? "none" : "block";
+  legendToggle.setAttribute("aria-expanded", !isExpanded);
+  legendToggle.textContent = !isExpanded ? "🎯 Color Guide (Tap to show)" : "🎯 Color Guide (Tap to hide)";
+});
+
+// Initialize legend visibility
+legendContent.style.display = "block";
+legendToggle.setAttribute("aria-expanded", "true");

@@ -6,28 +6,67 @@
   <title>WordBytes</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" href="icon-192.png" />
   <meta name="theme-color" content="#2d7dff" />
   <meta name="description" content="Daily 6-letter word puzzle. One word. One chance. How fast can you guess it?">
 </head>
-
 <body>
   <div class="container">
     <h1>WordBytes</h1>
     <p class="tagline">One 6-letter word. One daily challenge.</p>
 
+    <!-- How to Play Button -->
+    <button id="help-btn" class="help-btn" aria-label="How to play">ℹ️</button>
+
     <div id="gameboard"></div>
+
+    <!-- Collapsible Legend -->
+    <div class="legend-container">
+      <button id="legend-toggle" class="legend-toggle" aria-expanded="true">
+        🎯 Color Guide (Tap to hide)
+      </button>
+      <div id="legend-content" class="legend-content">
+        <p><span class="legend-box correct"></span> = Correct letter, correct position</p>
+        <p><span class="legend-box present"></span> = Correct letter, wrong position</p>
+        <p><span class="legend-box absent"></span> = Not in the word</p>
+      </div>
+    </div>
 
     <div class="keyboard" id="keyboard"></div>
 
     <div class="controls">
-      <button id="hint-btn">💡 Hint (Watch Ad)</button>
-      <button id="share-btn">📤 Share Result</button>
+      <!-- Submit Button -->
+      <button id="submit-btn" disabled data-tooltip="Submit your guess (Enter key also works)">✅ Submit</button>
+      
+      <!-- Hint Button -->
+      <button id="hint-btn" data-tooltip="Watch a short ad to reveal a letter">💡 Hint (Watch Ad)</button>
+      
+      <!-- Share Button -->
+      <button id="share-btn" data-tooltip="Copy your result to share with friends!">📤 Share Result</button>
     </div>
 
     <p class="streak" id="streak">Streak: 0 🔥</p>
+  </div>
+
+  <!-- How to Play Modal -->
+  <div id="help-modal" class="modal">
+    <div class="modal-content">
+      <h2>🎯 How to Play WordBytes</h2>
+      <ol>
+        <li>Guess the 6-letter word in 6 tries.</li>
+        <li>Type letters using the on-screen keyboard.</li>
+        <li>Press <strong>Submit</strong> or tap ✅ when your word is complete.</li>
+        <li>Letters will turn:</li>
+        <ul>
+          <li>🟦 <strong>Blue</strong> = Right letter, right position</li>
+          <li>🟨 <strong>Yellow</strong> = Right letter, wrong position</li>
+          <li>⬛ <strong>Gray</strong> = Letter not in word</li>
+        </ul>
+        <li>Use a hint (watch ad) if stuck!</li>
+        <li>Share your result and challenge friends!</li>
+      </ol>
+      <button id="close-modal" class="close-btn">Got it!</button>
+    </div>
   </div>
 
   <script src="script.js"></script>
