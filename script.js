@@ -42,18 +42,23 @@ for (let i = 0; i < MAX_ATTEMPTS; i++) {
   gameboard.appendChild(row);
 }
 
-// Keyboard keys
-const KEYS = "QWERTYUIOPASDFGHJKLZXCVBNM".split("");
+// Keyboard keys (now includes ENTER and BACKSPACE)
+const KEYS = [
+  'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
+  'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
+  'ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'
+];
 
 // Render keyboard
 KEYS.forEach(key => {
   const button = document.createElement("div");
   button.classList.add("key");
+  if (key === "ENTER") button.classList.add("enter");
+  if (key === "⌫") button.classList.add("backspace");
   button.textContent = key;
   button.addEventListener("click", () => onKeyClick(key));
   keyboard.appendChild(button);
 });
-
 
 // Enable/disable Submit button based on input
 function updateSubmitButton() {
@@ -82,29 +87,9 @@ function onKeyClick(key) {
     currentGuess += key;
     letters[currentGuess.length - 1].textContent = key;
   }
-  updateSubmitButton();
+
+  // No need to update Submit button — it's gone!
 }
-
-
-
-// Call it every time the guess changes
-document.addEventListener("keydown", () => {
-  updateSubmitButton();
-});
-
-// Also call it when typing via keyboard
-KEYS.forEach(key => {
-  const button = document.createElement("div");
-  button.classList.add("key");
-  button.textContent = key;
-  button.addEventListener("click", () => {
-    onKeyClick(key);
-    updateSubmitButton(); // Update button state
-  });
-  keyboard.appendChild(button);
-});
-
-
 
 function checkGuess() {
   const rows = gameboard.children;

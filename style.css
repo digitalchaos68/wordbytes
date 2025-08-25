@@ -154,19 +154,64 @@ h1 {
 /* Keyboard */
 .keyboard {
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(3, auto);
   gap: 6px;
   margin: 20px auto;
   max-width: 300px;
 }
 
+.key-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
 .key {
-  padding: 12px 6px;
+  padding: 10px 8px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
+  min-width: 40px;
+  text-align: center;
+}
+
+.enter {
+  width: 80px;
+  font-size: 0.9rem;
+  padding: 10px 0;
+}
+
+.backspace {
+  width: 80px;
+  font-size: 1.1rem;
+  padding: 10px 0;
+}
+
+.key[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.key[data-tooltip]:hover::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #333;
 }
 
 .key:active {
