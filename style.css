@@ -15,33 +15,51 @@ body {
 }
 
 .container {
-  text-align: center;
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #f5f8fa;
+  padding: 20px;
+  margin: 0;
 }
 
+.game-container {
+  width: 100%;
+  max-width: 360px;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  overflow: hidden;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Title & Tagline */
 h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #2d7dff;
-  margin: 20px 0;
+  margin-bottom: 8px;
 }
 
 .tagline {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #666;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-/* Help Button (Top Right) */
+/* Help Button */
 .help-btn {
   position: absolute;
   top: 20px;
   right: 20px;
   background: none;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   cursor: pointer;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -83,41 +101,7 @@ h1 {
 
 /* Collapsible Legend */
 .legend-container {
-  margin: 10px auto;
-  max-width: 300px;
-  text-align: left;
-}
-
-.legend-toggle {
-  background: none;
-  border: none;
-  font-size: 0.9rem;
-  color: #2d7dff;
-  cursor: pointer;
-  text-decoration: underline;
-  margin-bottom: 8px;
-  padding: 0;
-}
-
-.legend-content {
-  font-size: 0.85rem;
-  color: #555;
-}
-
-.legend-box {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-right: 6px;
-  border-radius: 4px;
-}
-
-.legend .correct { background: #2d7dff; }
-.legend .present { background: #f9c543; }
-.legend .absent { background: #8c8c8c; }
-
-.legend-container {
-  margin: 10px auto;
+  margin: 16px auto 0;
   max-width: 300px;
   text-align: left;
   font-size: 0.8rem;

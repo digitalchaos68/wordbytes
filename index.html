@@ -11,71 +11,67 @@
   <meta name="description" content="Daily 6-letter word puzzle. One word. One chance. How fast can you guess it?">
 </head>
 <body>
-  <div class="container">
+<div class="container">
+  <div class="game-container">
     <h1>WordBytes</h1>
     <p class="tagline">One 6-letter word. One daily challenge.</p>
 
-    <!-- How to Play Button -->
+    <!-- Help Button -->
     <button id="help-btn" class="help-btn" aria-label="How to play">ℹ️</button>
 
     <div id="gameboard"></div>
 
+    <!-- Keyboard -->
+    <div class="keyboard" id="keyboard">
+      <!-- Row 1 -->
+      <div class="key-row">
+        <div class="key">Q</div>
+        <div class="key">W</div>
+        <div class="key">E</div>
+        <div class="key">R</div>
+        <div class="key">T</div>
+        <div class="key">Y</div>
+        <div class="key">U</div>
+        <div class="key">I</div>
+        <div class="key">O</div>
+        <div class="key">P</div>
+      </div>
 
+      <!-- Row 2 -->
+      <div class="key-row">
+        <div class="key">A</div>
+        <div class="key">S</div>
+        <div class="key">D</div>
+        <div class="key">F</div>
+        <div class="key">G</div>
+        <div class="key">H</div>
+        <div class="key">J</div>
+        <div class="key">K</div>
+        <div class="key">L</div>
+      </div>
 
-<div class="keyboard" id="keyboard">
-  <!-- Row 1 -->
-  <div class="key-row">
-    <div class="key">Q</div>
-    <div class="key">W</div>
-    <div class="key">E</div>
-    <div class="key">R</div>
-    <div class="key">T</div>
-    <div class="key">Y</div>
-    <div class="key">U</div>
-    <div class="key">I</div>
-    <div class="key">O</div>
-    <div class="key">P</div>
-  </div>
+      <!-- Row 3 -->
+      <div class="key-row">
+        <div class="key enter" data-tooltip="Press to submit your guess">ENTER</div>
+        <div class="key">Z</div>
+        <div class="key">X</div>
+        <div class="key">C</div>
+        <div class="key">V</div>
+        <div class="key">B</div>
+        <div class="key">N</div>
+        <div class="key">M</div>
+        <div class="key backspace">⌫</div>
+      </div>
+    </div>
 
-  <!-- Row 2 -->
-  <div class="key-row">
-    <div class="key">A</div>
-    <div class="key">S</div>
-    <div class="key">D</div>
-    <div class="key">F</div>
-    <div class="key">G</div>
-    <div class="key">H</div>
-    <div class="key">J</div>
-    <div class="key">K</div>
-    <div class="key">L</div>
-  </div>
-
-  <!-- Row 3 -->
-  <div class="key-row">
-    <div class="key enter" data-tooltip="Press to submit your guess">ENTER</div>
-    <div class="key">Z</div>
-    <div class="key">X</div>
-    <div class="key">C</div>
-    <div class="key">V</div>
-    <div class="key">B</div>
-    <div class="key">N</div>
-    <div class="key">M</div>
-    <div class="key backspace">⌫</div>
-  </div>
-</div>
-
-
-<div class="controls">
-  <!-- Hint Button -->
-  <button id="hint-btn" data-tooltip="Watch a short ad to reveal a letter">💡 Hint (Watch Ad)</button>
-  
-  <!-- Share Button -->
-  <button id="share-btn" data-tooltip="Copy your result to share with friends!">📤 Share Result</button>
-</div>
+    <div class="controls">
+      <button id="hint-btn" data-tooltip="Watch a short ad to reveal a letter">💡 Hint (Watch Ad)</button>
+      <button id="share-btn" data-tooltip="Copy your result to share with friends!">📤 Share Result</button>
+    </div>
 
     <p class="streak" id="streak">Streak: 0 🔥</p>
 
-        <!-- Collapsible Legend -->
+    <!-- Legend (Below Controls) -->
     <div class="legend-container">
       <button id="legend-toggle" class="legend-toggle" aria-expanded="true">
         🎯 Color Guide (Tap to hide)
@@ -87,6 +83,7 @@
       </div>
     </div>
   </div>
+</div>
 
   <!-- How to Play Modal -->
   <div id="help-modal" class="modal">
