@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WordBytes</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <meta name="theme-color" content="#2d7dff" />
+  <meta name="description" content="Daily 6-letter word puzzle. One word. One chance. How fast can you guess it?">
+</head>
+<body>
+  <div class="container">
+    <h1>WordBytes</h1>
+    <p class="tagline">One 6-letter word. One daily challenge.</p>
+
+    <div id="gameboard"></div>
+
+    <div class="keyboard" id="keyboard"></div>
+
+    <div class="controls">
+      <button id="hint-btn">💡 Hint (Watch Ad)</button>
+      <button id="share-btn">📤 Share Result</button>
+    </div>
+
+    <p class="streak" id="streak">Streak: 0 🔥</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
