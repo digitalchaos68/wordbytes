@@ -19,6 +19,25 @@
     padding: 8px 6px;
   }
 }
+/* On large screens: prevent wrap */
+@media (min-width: 540px) {
+  .key-row {
+    flex-wrap: nowrap;
+  }
+
+  .keyboard {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .letter {
+    font-size: 1.8rem;
+  }
+
+  .key {
+    font-size: 1rem;
+  }
+}
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: #f5f8fa;
@@ -39,14 +58,15 @@ body {
   margin: 0;
 }
 
-/* === RESPONSIVE GAME CONTAINER (up to 800px) === */
+
+/* === RESPONSIVE GAME CONTAINER === */
 .game-container {
   width: 100%;
-  max-width: 100%;
+  max-width: 800px;
   background: white;
   border-radius: 20px;
   padding: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -71,8 +91,9 @@ h1 {
 
 
 /* === CONTROLS (buttons scale up) === */
+/* === CONTROLS === */
 .controls {
-  margin: 24px 0;
+  margin: 20px 0;
   display: flex;
   justify-content: center;
   gap: 12px;
@@ -80,15 +101,15 @@ h1 {
 }
 
 .controls button {
-  padding: 14px 24px;
-  font-size: 1.1rem;
+  padding: 12px 20px;
+  font-size: 1rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   background: #2d7dff;
   color: white;
   font-weight: bold;
-  min-width: 130px;
+  min-width: 120px;
 }
 
 #hint-btn {
@@ -116,6 +137,7 @@ h1 {
 }
 
 /* === GAMEBOARD (bigger letters for larger screens) === */
+
 #gameboard {
   display: grid;
   grid-template-rows: repeat(6, 1fr);
@@ -124,7 +146,6 @@ h1 {
   width: 95%;
   max-width: 300px;
   height: auto;
-  overflow: visible;
 }
 
 .row {
@@ -135,7 +156,7 @@ h1 {
 
 .letter {
   width: 100%;
-  aspect-ratio: 1 / 1; /* Square */
+  aspect-ratio: 1 / 1;
   border: 2px solid #ddd;
   display: flex;
   align-items: center;
@@ -152,7 +173,7 @@ h1 {
 
 
 
-/* === STREAK & LEGEND (scale fonts slightly) === */
+/* === STREAK & LEGEND === */
 .streak {
   margin-top: 20px;
   font-size: 1.2rem;
@@ -160,11 +181,9 @@ h1 {
   color: #333;
 }
 
-
-/* Collapsible Legend */
 .legend-container {
   margin: 24px auto 0;
-  max-width: 500px;
+  max-width: 300px;
   text-align: left;
   font-size: 0.9rem;
 }
@@ -198,15 +217,15 @@ h1 {
 .legend .absent { background: #8c8c8c; }
 
 
-/* === KEYBOARD (responsive, wider on large screens) === */
+/* === KEYBOARD (responsive) === */
 .keyboard {
   display: grid;
   grid-template-rows: repeat(3, auto);
   gap: 6px;
   margin: 20px auto;
-  max-width: 300px;
-  width: 95%;
-  padding: 0 8px;
+  width: calc(100% - 32px);
+  max-width: 500px;
+  padding: 0 16px;
   justify-content: center;
 }
 
@@ -214,8 +233,22 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 6px;
+  /* Default: wrap on small screens */
   flex-wrap: wrap;
   width: 100%;
+}
+
+/* On large screens: prevent wrap */
+@media (min-width: 540px) {
+  .key-row {
+    flex-wrap: nowrap;
+  }
+
+  /* Ensure full width on large screens */
+  .keyboard {
+    max-width: 500px;
+    width: 100%;
+  }
 }
 
 .key {
@@ -232,16 +265,18 @@ h1 {
   min-height: 0;
 }
 
-.enter {
+.enter,
+.backspace {
   width: 70px;
-  font-size: 0.9rem;
   padding: 10px 0;
 }
 
+.enter {
+  font-size: 0.9rem;
+}
+
 .backspace {
-  width: 70px;
   font-size: 1.1rem;
-  padding: 10px 0;
 }
 
 .key[data-tooltip]:hover::after {
