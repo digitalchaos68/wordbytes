@@ -257,23 +257,6 @@ shareBtn.addEventListener("click", () => {
   }
 });
 
-// === PROPELLER ADS ===
-window.addEventListener('load', () => {
-  console.log("PropellerAds loaded?", typeof PropellerAds !== 'undefined');
-  if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
-    PropellerAds.init({ zoneId: '9775971', type: 'rewarded' });
-  } else {
-    setTimeout(() => {
-      if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
-        PropellerAds.init({ zoneId: '9775971', type: 'rewarded' });
-      } else {
-        console.error("PropellerAds not available");
-      }
-    }, 1000);
-  }
-});
-
-
 // Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -317,4 +300,31 @@ window.addEventListener('load', () => {
       }, 2000);
     }
   }, 1000);
+});
+// Hint button
+hintBtn.addEventListener("click", () => {
+  if (gameOver) return;
+
+  // If ad system is ready, show rewarded video
+  if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
+    PropellerAds.show('rewarded', {
+      callbacks: {
+        onAdStarted: () => console.log("Ad started"),
+        onAdRewarded: () => {
+          const randomIndex = Math.floor(Math.random() * WORD_LENGTH);
+          const hintLetter = SOLUTION[randomIndex];
+          alert(`🎯 Hint: The word contains '${hintLetter}'`);
+        },
+        onAdSkipped: () => {
+          alert("You need to watch the full ad to get a hint.");
+        },
+        onError: (err) => {
+          console.error("Ad error:", err);
+          alert("Ad not available. Try again later.");
+        }
+      }
+    });
+  } else {
+    alert("Ad system loading... Please wait a few seconds and try again.");
+  }
 });
