@@ -312,6 +312,7 @@ hintBtn.addEventListener("click", () => {
     'width=380,height=600,resizable,scrollbars=yes'
   );
 
+  
   if (!adPopup) {
     alert("Please allow popups to watch the ad.");
     return;
