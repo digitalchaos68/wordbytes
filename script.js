@@ -157,52 +157,31 @@ playSound("correct");
   bgMusic.volume = 0.05;
   setTimeout(() => { bgMusic.volume = 0.2; }, 1000);
 
-    setTimeout(() => alert("You cracked the byte! 🎉"), 300);
-      // Show restart button
-  restartBtn.style.display = "inline-block";
-  } else if (currentRow >= MAX_ATTEMPTS - 1) {
+  alert(`🎉 You cracked the byte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}!\n\nShare your result and challenge your friends! 📲`);
+// Auto-trigger share after win
+setTimeout(() => {
+  shareBtn.click();
+}, 1000);
+
+
+} else if (currentRow >= MAX_ATTEMPTS - 1) {
     gameOver = true;
     streak = 0;
     localStorage.setItem("wordBytesStreak", 0);
     updateStreak();
     playSound("fail"); // ← Add this
-    alert(`Game over! The word was: ${SOLUTION}`);
-      // Show restart button
-  restartBtn.style.display = "inline-block";
-  }
+   alert(`💔 Tough one today! The word was: ${SOLUTION}\n\nThanks for playing! Share your result and come back tomorrow for a new challenge! 🌟`);
+
+// Auto-trigger share after win
+setTimeout(() => {
+  shareBtn.click();
+}, 1000);
+
 
   currentRow++;
   currentGuess = "";
 }
 
-
-// === RESTART GAME ===
-const restartBtn = document.getElementById("restart-btn");
-
-function restartGame() {
-  // Reset game state
-  currentRow = 0;
-  currentGuess = "";
-  gameOver = false;
-
-  // Clear gameboard
-  const rows = gameboard.children;
-  for (let i = 0; i < rows.length; i++) {
-    const letters = rows[i].children;
-    for (let j = 0; j < letters.length; j++) {
-      letters[j].textContent = "";
-      letters[j].classList.remove("correct", "present", "absent");
-    }
-  }
-
-  // Hide restart button
-  restartBtn.style.display = "none";
-
-  // Reset keyboard
-  document.querySelectorAll('.key').forEach(key => {
-    key.classList.remove('pressed');
-  });
-}
 
 function updateStreak() {
   streakEl.textContent = `Streak: ${streak} 🔥`;
@@ -356,10 +335,6 @@ muteBtn.addEventListener("click", () => {
     bgMusic.play().catch(e => console.log("Music play failed:", e));
   }
 
-});
-
-restartBtn.addEventListener("click", () => {
-  restartGame();
 });
 
 // Update playSound to respect mute
