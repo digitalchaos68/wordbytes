@@ -301,31 +301,30 @@ window.addEventListener('load', () => {
     }
   }, 1000);
 });
-// Hint button
+// === HINT BUTTON → OPEN DIRECT AD LINK ===
 hintBtn.addEventListener("click", () => {
   if (gameOver) return;
 
-  // If ad system is ready, show rewarded video
-  if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
-    PropellerAds.show('rewarded', {
-      callbacks: {
-        onAdStarted: () => console.log("Ad started"),
-        onAdRewarded: () => {
-          const randomIndex = Math.floor(Math.random() * WORD_LENGTH);
-          const hintLetter = SOLUTION[randomIndex];
-          alert(`🎯 Hint: The word contains '${hintLetter}'`);
-        },
-        onAdSkipped: () => {
-          alert("You need to watch the full ad to get a hint.");
-        },
-        onError: (err) => {
-          console.error("Ad error:", err);
-          alert("Ad not available. Try again later.");
-        }
-      }
-    });
-  } else {
-    alert("Ad system loading... Please wait a few seconds and try again.");
-  }
-});
+  // Open ad in popup
+  const adPopup = window.open(
+    'https://otieu.com/4/9777670',
+    'propeller_ads',
+    'width=380,height=600,resizable,scrollbars=yes'
+  );
 
+  if (!adPopup) {
+    alert("Please allow popups to watch the ad.");
+    return;
+  }
+
+  // Poll to detect when popup is closed
+  const checkPopup = setInterval(() => {
+    if (adPopup.closed) {
+      clearInterval(checkPopup);
+      // Simulate ad watched → give hint
+      const randomIndex = Math.floor(Math.random() * WORD_LENGTH);
+      const hintLetter = SOLUTION[randomIndex];
+      alert(`🎯 Hint: The word contains '${hintLetter}'`);
+    }
+  }, 500);
+});
