@@ -275,7 +275,7 @@ window.addEventListener('load', () => {
 
       PropellerAds.show('banner', {
         container: document.getElementById('ad-banner-top'),
-        zoneId: '9775971',
+        zoneId: '9776139',
         callbacks: {
           onAdLoaded: () => {
             console.log("✅ Banner ad loaded!");
@@ -294,7 +294,7 @@ window.addEventListener('load', () => {
         if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
           PropellerAds.show('banner', {
             container: document.getElementById('ad-banner-top'),
-            zoneId: '9775971'
+            zoneId: '9776139'
           });
         }
       }, 2000);
@@ -333,11 +333,11 @@ hintBtn.addEventListener("click", () => {
 window.addEventListener('load', () => {
   console.log("PropellerAds loaded?", typeof PropellerAds !== 'undefined');
   if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
-    PropellerAds.init({ zoneId: '9775971', type: 'rewarded' });
+    PropellerAds.init({ zoneId: '9776139', type: 'rewarded' });
   } else {
     setTimeout(() => {
       if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
-        PropellerAds.init({ zoneId: '9775971', type: 'rewarded' });
+        PropellerAds.init({ zoneId: '9776139', type: 'rewarded' });
       } else {
         console.error("PropellerAds not available");
       }
