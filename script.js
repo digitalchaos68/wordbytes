@@ -390,6 +390,10 @@ window.addEventListener('load', () => {
   }, 1500); // Show for 1.5 seconds
 });
 
+window.addEventListener('load', () => {
+  console.log("PropellerAds loaded?", typeof PropellerAds !== 'undefined');
+});
+
 // === HINT BUTTON → REWARDED VIDEO AD ===
 hintBtn.addEventListener("click", () => {
   if (gameOver) return;
