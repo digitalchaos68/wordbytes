@@ -469,7 +469,7 @@ h1 {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 800px;
+  max-width: 300px;
   width: 100%;
   margin: 0 auto;
   height: auto;
@@ -486,7 +486,7 @@ h1 {
 
 .ad-banner img {
   width: 100%;
-  max-width: 800px;
+  max-width: 300px;
   height: auto;
   border-radius: 8px;
 }
