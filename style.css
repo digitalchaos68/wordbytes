@@ -101,6 +101,7 @@ body {
 
 /* === RESPONSIVE GAME CONTAINER === */
 .game-container {
+  margin-top: 200px; /* Push content down */
   width: 100%;
   max-width: 800px;
   background: white;
@@ -465,17 +466,27 @@ h1 {
 }
 
 .ad-banner {
-  min-height: 50px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.9rem;
-  color: #666;
-  margin: 10px auto;
+  z-index: 100;
+  background: white;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 10px;
   max-width: 300px;
-  border: 1px dashed #ddd;
+  margin: 0 auto;
+}
+
+.ad-banner img {
+  width: 100%;
+  height: auto;
   border-radius: 8px;
-  overflow: hidden;
 }
 
 .ad-banner .logo {
@@ -487,11 +498,7 @@ h1 {
   font-size: 0.8rem;
   color: #666;
 }
-.ad-banner img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
+
 
 /* === TOP CONTROLS === */
 .top-controls {
