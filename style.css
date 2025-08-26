@@ -38,6 +38,46 @@
     font-size: 1rem;
   }
 }
+
+
+/* === SPLASH SCREEN === */
+.splash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  flex-direction: column;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.splash-content h1 {
+  font-size: 2.5rem;
+  color: #2d7dff;
+  margin: 0;
+}
+
+.splash-content p {
+  font-size: 1rem;
+  color: #666;
+  margin-top: 8px;
+}
+
+/* Fade out animation */
+.splash.fade-out {
+  animation: fadeOut 1s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; visibility: hidden; }
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: #f5f8fa;

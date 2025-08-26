@@ -378,3 +378,14 @@ function playSound(sound) {
   audio.play().catch(e => console.log("Audio play failed:", e));
 }
 
+// === SPLASH SCREEN ===
+const splashScreen = document.getElementById("splash-screen");
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    splashScreen.classList.add('fade-out');
+    setTimeout(() => {
+      splashScreen.style.display = 'none';
+    }, 1000);
+  }, 1500); // Show for 1.5 seconds
+});
