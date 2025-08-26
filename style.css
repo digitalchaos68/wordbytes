@@ -487,6 +487,12 @@ h1 {
   font-size: 0.8rem;
   color: #666;
 }
+.ad-banner img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
 /* === TOP CONTROLS === */
 .top-controls {
   display: flex;
