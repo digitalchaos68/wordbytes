@@ -101,7 +101,7 @@ body {
 
 /* === RESPONSIVE GAME CONTAINER === */
 .game-container {
-  margin-top: 200px; /* Push content down */
+  margin-top: 400px; /* Push content down */
   width: 100%;
   max-width: 800px;
   background: white;
@@ -467,7 +467,7 @@ h1 {
 
 .ad-banner {
   position: fixed;
-  
+  max-width: 800px;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
