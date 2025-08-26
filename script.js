@@ -328,3 +328,19 @@ hintBtn.addEventListener("click", () => {
     alert("Ad system loading... Please wait a few seconds and try again.");
   }
 });
+
+// === PROPELLER ADS ===
+window.addEventListener('load', () => {
+  console.log("PropellerAds loaded?", typeof PropellerAds !== 'undefined');
+  if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
+    PropellerAds.init({ zoneId: '9775971', type: 'rewarded' });
+  } else {
+    setTimeout(() => {
+      if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
+        PropellerAds.init({ zoneId: '9775971', type: 'rewarded' });
+      } else {
+        console.error("PropellerAds not available");
+      }
+    }, 1000);
+  }
+});
