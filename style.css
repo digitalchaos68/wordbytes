@@ -101,7 +101,7 @@ body {
 
 /* === RESPONSIVE GAME CONTAINER === */
 .game-container {
-  padding-top: 300px; /* Push content down */
+  padding-top: 120px; /* Push content down */
   width: 100%;
   max-width: 800px;
   background: white;
@@ -481,7 +481,6 @@ h1 {
   border-bottom: 1px solid #eee;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   padding: 10px;
-  max-width: 300px;
   margin: 0 auto;
 }
 
