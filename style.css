@@ -489,6 +489,23 @@ h1 {
   color: #333;
 }
 
+.restart-btn-container {
+  margin: 16px auto;
+  text-align: center;
+}
+
+#restart-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #2d7dff;
+  color: white;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+
 /* === DARK MODE STYLES === */
 body.dark-mode {
   background: #121212;

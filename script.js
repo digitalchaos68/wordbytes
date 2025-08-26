@@ -158,6 +158,8 @@ playSound("correct");
   setTimeout(() => { bgMusic.volume = 0.2; }, 1000);
 
     setTimeout(() => alert("You cracked the byte! 🎉"), 300);
+      // Show restart button
+  restartBtn.style.display = "inline-block";
   } else if (currentRow >= MAX_ATTEMPTS - 1) {
     gameOver = true;
     streak = 0;
@@ -165,10 +167,41 @@ playSound("correct");
     updateStreak();
     playSound("fail"); // ← Add this
     alert(`Game over! The word was: ${SOLUTION}`);
+      // Show restart button
+  restartBtn.style.display = "inline-block";
   }
 
   currentRow++;
   currentGuess = "";
+}
+
+
+// === RESTART GAME ===
+const restartBtn = document.getElementById("restart-btn");
+
+function restartGame() {
+  // Reset game state
+  currentRow = 0;
+  currentGuess = "";
+  gameOver = false;
+
+  // Clear gameboard
+  const rows = gameboard.children;
+  for (let i = 0; i < rows.length; i++) {
+    const letters = rows[i].children;
+    for (let j = 0; j < letters.length; j++) {
+      letters[j].textContent = "";
+      letters[j].classList.remove("correct", "present", "absent");
+    }
+  }
+
+  // Hide restart button
+  restartBtn.style.display = "none";
+
+  // Reset keyboard
+  document.querySelectorAll('.key').forEach(key => {
+    key.classList.remove('pressed');
+  });
 }
 
 function updateStreak() {
@@ -323,6 +356,10 @@ muteBtn.addEventListener("click", () => {
     bgMusic.play().catch(e => console.log("Music play failed:", e));
   }
 
+});
+
+restartBtn.addEventListener("click", () => {
+  restartGame();
 });
 
 // Update playSound to respect mute
