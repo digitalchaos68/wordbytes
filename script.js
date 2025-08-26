@@ -5,6 +5,37 @@ const WORD_LIST = [
   "frozen", "closet", "prayer", "guitar"
 ];
 
+// === BACKGROUND MUSIC ===
+let bgMusic = new Audio("sounds/background.mp3");
+bgMusic.loop = true;
+bgMusic.volume = 0.2; // Low volume, just beneath gameplay sounds
+
+// Start music on first user interaction (required by browsers)
+function startMusic() {
+  if (!isMuted && !bgMusic.playing) {
+    bgMusic.play().catch(e => console.log("Music play failed:", e));
+  }
+}
+
+// Pause music
+function pauseMusic() {
+  bgMusic.pause();
+}
+
+// Resume music
+function resumeMusic() {
+  if (!isMuted) {
+    bgMusic.play().catch(e => console.log("Music play failed:", e));
+  }
+}
+
+// === SOUND EFFECTS ===
+function playSound(sound) {
+  const audio = new Audio(`sounds/${sound}.mp3`);
+  audio.volume = 0.3;
+  audio.play().catch(e => console.log("Audio play failed:", e));
+}
+
 // Get today's word (deterministic)
 function getTodaysWord() {
   const now = new Date();
@@ -56,6 +87,15 @@ function onKeyClick(key) {
   const currentRowEl = rows[currentRow];
   const letters = currentRowEl.children;
 
+  // Start background music on first interaction
+  if (!bgMusic.isPlaying) {
+    bgMusic.play().catch(e => console.log("Music autoplay blocked — user must interact first"));
+    bgMusic.isPlaying = true;
+  }
+
+  // Play tap sound
+  playSound("tap");
+
   if (key === "ENTER") {
     if (currentGuess.length !== WORD_LENGTH) {
       flashMessage("Not enough letters!");
@@ -89,6 +129,8 @@ function checkGuess() {
       solutionArray[i] = null; // mark used
     }
   }
+  // Play correct letter sound
+playSound("correct");
 
   // Second pass: mark present (yellow)
   for (let i = 0; i < WORD_LENGTH; i++) {
@@ -109,12 +151,19 @@ function checkGuess() {
     streak++;
     localStorage.setItem("wordBytesStreak", streak);
     updateStreak();
+    playSound("win"); // ← Add this
+
+  // Fade out music
+  bgMusic.volume = 0.05;
+  setTimeout(() => { bgMusic.volume = 0.2; }, 1000);
+
     setTimeout(() => alert("You cracked the byte! 🎉"), 300);
   } else if (currentRow >= MAX_ATTEMPTS - 1) {
     gameOver = true;
     streak = 0;
     localStorage.setItem("wordBytesStreak", 0);
     updateStreak();
+    playSound("fail"); // ← Add this
     alert(`Game over! The word was: ${SOLUTION}`);
   }
 
@@ -218,3 +267,53 @@ legendToggle.addEventListener("click", () => {
 // Initialize legend visibility
 legendContent.style.display = "block";
 legendToggle.setAttribute("aria-expanded", "true");
+
+// === DARK MODE TOGGLE ===
+const darkModeToggle = document.getElementById("dark-mode-toggle");
+
+// Check saved preference
+const isDarkMode = localStorage.getItem("wordBytesDarkMode") === "true";
+if (isDarkMode) {
+  document.body.classList.add("dark-mode");
+  darkModeToggle.textContent = "☀️";
+}
+
+// Toggle mode
+darkModeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  const isDark = document.body.classList.contains("dark-mode");
+  localStorage.setItem("wordBytesDarkMode", isDark);
+  darkModeToggle.textContent = isDark ? "☀️" : "🌙";
+});
+
+// === MUTE TOGGLE ===
+const muteBtn = document.getElementById("mute-btn");
+
+// Check saved preference
+let isMuted = localStorage.getItem("wordBytesMuted") === "true";
+if (isMuted) {
+  muteBtn.textContent = "🔇";
+}
+
+// Toggle mute
+muteBtn.addEventListener("click", () => {
+  isMuted = !isMuted;
+  muteBtn.textContent = isMuted ? "🔇" : "🔊";
+  localStorage.setItem("wordBytesMuted", isMuted);
+
+  // Pause or resume background music
+  if (isMuted) {
+    bgMusic.pause();
+  } else {
+    bgMusic.play().catch(e => console.log("Music play failed:", e));
+  }
+
+});
+
+// Update playSound to respect mute
+function playSound(sound) {
+  if (isMuted) return; // Don't play if muted
+  const audio = new Audio(`sounds/${sound}.mp3`);
+  audio.volume = 0.3;
+  audio.play().catch(e => console.log("Audio play failed:", e));
+}

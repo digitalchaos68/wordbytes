@@ -451,3 +451,97 @@ h1 {
   font-size: 0.8rem;
   color: #666;
 }
+/* === TOP CONTROLS === */
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.theme-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f0f0f0;
+  color: #333;
+}
+
+.mute-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f0f0f0;
+  color: #333;
+}
+
+/* === DARK MODE STYLES === */
+body.dark-mode {
+  background: #121212;
+  color: #e0e0e0;
+}
+
+.dark-mode .game-container {
+  background: #1e1e1e;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.dark-mode h1 {
+  color: #4a9eff;
+}
+
+.dark-mode .tagline,
+.dark-mode .streak,
+.dark-mode .legend-content,
+.dark-mode .legend-toggle {
+  color: #bbb;
+}
+
+.dark-mode .letter {
+  border-color: #444;
+}
+
+.dark-mode .correct { background: #0066cc; }
+.dark-mode .present { background: #cc9500; }
+.dark-mode .absent { background: #555; }
+
+.dark-mode .keyboard .key {
+  background: #2d2d2d;
+  border-color: #444;
+  color: white;
+}
+
+.dark-mode .controls button {
+  background: #0066cc;
+}
+
+.dark-mode .controls #hint-btn {
+  background: #cc9500;
+}
+
+.dark-mode .legend .correct { background: #0066cc; }
+.dark-mode .legend .present { background: #cc9500; }
+.dark-mode .legend .absent { background: #555; }
+
+.dark-mode .ad-banner {
+  background: #1e1e1e;
+  border-color: #444;
+  color: white;
+}
+
+.dark-mode .ad-banner .logo { color: #4a9eff; }
+.dark-mode .ad-banner .ad-label { color: #aaa; }   
