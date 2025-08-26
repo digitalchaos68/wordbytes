@@ -237,10 +237,6 @@ h1 {
   width: 100%;
 }
 
-/* Row 3: Z X C V B N M ENTER ⌫ */
-.key-row:nth-child(3) {
-  flex-direction: row-reverse;
-}
 
 /* On large screens: prevent wrap */
 @media (min-width: 540px) {
