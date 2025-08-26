@@ -66,13 +66,13 @@ body {
   background: white;
   border-radius: 20px;
   padding: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   overflow: hidden;
   text-align: center;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   margin: 0 auto;
+  position: relative;
 }
-
 
 
 
@@ -405,20 +405,23 @@ h1 {
   white-space: nowrap;
   border: 0;
 }
+
 .ad-banner {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100px;
+  height: 50px;
   background: white;
   border-bottom: 1px solid #eee;
   z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 .ad-banner .logo {
