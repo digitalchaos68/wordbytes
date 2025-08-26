@@ -389,3 +389,38 @@ window.addEventListener('load', () => {
     }, 1000);
   }, 1500); // Show for 1.5 seconds
 });
+
+// === HINT BUTTON → REWARDED VIDEO AD ===
+hintBtn.addEventListener("click", () => {
+  if (gameOver) return;
+
+  // Check if PropellerAds is ready
+  if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
+    PropellerAds.show('rewarded', {
+      callbacks: {
+        onAdStarted: () => {
+          console.log("Ad started");
+        },
+        onAdRewarded: () => {
+          // User watched full ad → give hint
+          const randomIndex = Math.floor(Math.random() * WORD_LENGTH);
+          const hintLetter = SOLUTION[randomIndex];
+          alert(`🎯 Hint: The word contains '${hintLetter}'`);
+        },
+        onAdSkipped: () => {
+          alert("You need to watch the full ad to get a hint.");
+        },
+        onAdClosed: () => {
+          console.log("Ad closed");
+        },
+        onError: (err) => {
+          console.error("Ad failed to load:", err);
+          alert("Ad not available. Try again later.");
+        }
+      }
+    });
+  } else {
+    // Fallback if ad system not ready
+    alert("Ad loading... Please wait a few seconds and try again.");
+  }
+});
