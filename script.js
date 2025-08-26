@@ -246,6 +246,10 @@ closeModal.addEventListener("click", () => {
   helpModal.style.display = "none";
 });
 
+
+
+
+
 // Close modal if clicked outside
 window.addEventListener("click", (e) => {
   if (e.target === helpModal) {
@@ -267,6 +271,17 @@ legendToggle.addEventListener("click", () => {
 // Initialize legend visibility
 legendContent.style.display = "block";
 legendToggle.setAttribute("aria-expanded", "true");
+
+// === Attach click events to static HTML keyboard ===
+document.querySelectorAll('.key').forEach(button => {
+  const key = button.textContent;
+
+  button.addEventListener('click', () => {
+    onKeyClick(key);
+  });
+});
+
+
 
 // === DARK MODE TOGGLE ===
 const darkModeToggle = document.getElementById("dark-mode-toggle");
@@ -317,3 +332,4 @@ function playSound(sound) {
   audio.volume = 0.3;
   audio.play().catch(e => console.log("Audio play failed:", e));
 }
+
