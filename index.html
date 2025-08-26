@@ -16,7 +16,13 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@yourhandle">
   <!-- Propeller Ads Rewarded Video -->
-  <script src="https://cdn.proplayerads.com/pa-v3.min.js" async></script>
+  <script src="https://cdn.proplayerads.com/pa-v3.min.js" async>
+  window.PropellerAds = window.PropellerAds || {};
+  window.PropellerAds.onReady = function() {
+    console.log("PropellerAds ready!");
+  };
+</script>
+
 </head>
 <body>
 

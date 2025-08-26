@@ -390,15 +390,32 @@ window.addEventListener('load', () => {
   }, 1500); // Show for 1.5 seconds
 });
 
-// Initialize PropellerAds on load
+
 window.addEventListener('load', () => {
-  if (typeof PropellerAds !== 'undefined') {
-    PropellerAds.init({
-      zoneId: '9775971',
-      type: 'rewarded'
-    });
-  }
+  console.log("PropellerAds loaded?", typeof PropellerAds !== 'undefined');
+  console.log("PropellerAds.init exists?", typeof PropellerAds?.init === 'function');
 });
+
+
+
+// Initialize PropellerAds
+if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
+  PropellerAds.init({
+    zoneId: '9775971',
+    type: 'rewarded'
+  });
+} else {
+  setTimeout(() => {
+    if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
+      PropellerAds.init({
+        zoneId: '9775971',
+        type: 'rewarded'
+      });
+    } else {
+      console.error("PropellerAds not available");
+    }
+  }, 1000);
+}
 
 // Hint button
 hintBtn.addEventListener("click", () => {
