@@ -405,6 +405,7 @@ if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'functio
     type: 'rewarded'
   });
 } else {
+  // Fallback: try again after 1 second
   setTimeout(() => {
     if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
       PropellerAds.init({
@@ -412,7 +413,7 @@ if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'functio
         type: 'rewarded'
       });
     } else {
-      console.error("PropellerAds not available");
+      console.error("PropellerAds not available. Try using direct link.");
     }
   }, 1000);
 }
@@ -443,3 +444,15 @@ hintBtn.addEventListener("click", () => {
     alert("Ad system loading... Please wait a few seconds and try again.");
   }
 });
+
+// Show banner ad
+if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
+  PropellerAds.show('banner', {
+    container: document.getElementById('ad-banner-top'),
+    callbacks: {
+      onError: (err) => {
+        console.error("Banner ad error:", err);
+      }
+    }
+  });
+}
