@@ -8,29 +8,11 @@ const WORD_LIST = [
 // === BACKGROUND MUSIC ===
 let bgMusic = new Audio("sounds/background.mp3");
 bgMusic.loop = true;
-bgMusic.volume = 0.2; // Low volume, just beneath gameplay sounds
-
-// Start music on first user interaction (required by browsers)
-function startMusic() {
-  if (!isMuted && !bgMusic.playing) {
-    bgMusic.play().catch(e => console.log("Music play failed:", e));
-  }
-}
-
-// Pause music
-function pauseMusic() {
-  bgMusic.pause();
-}
-
-// Resume music
-function resumeMusic() {
-  if (!isMuted) {
-    bgMusic.play().catch(e => console.log("Music play failed:", e));
-  }
-}
+bgMusic.volume = 0.2;
 
 // === SOUND EFFECTS ===
 function playSound(sound) {
+  if (isMuted) return;
   const audio = new Audio(`sounds/${sound}.mp3`);
   audio.volume = 0.3;
   audio.play().catch(e => console.log("Audio play failed:", e));
@@ -41,7 +23,7 @@ function getTodaysWord() {
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
   const diff = now - start;
-  const day = Math.floor(diff / 86400000); // ms per day
+  const day = Math.floor(diff / 86400000);
   return WORD_LIST[day % WORD_LIST.length];
 }
 
@@ -52,31 +34,16 @@ const WORD_LENGTH = 6;
 let currentRow = 0;
 let currentGuess = "";
 let gameOver = false;
-let gameWon = false; // Track if player won
+let gameWon = false;
 let streak = parseInt(localStorage.getItem("wordBytesStreak")) || 0;
 
-// DOM
+// DOM Elements
 const gameboard = document.getElementById("gameboard");
-const keyboard = document.getElementById("keyboard");
 const shareBtn = document.getElementById("share-btn");
 const hintBtn = document.getElementById("hint-btn");
 const streakEl = document.getElementById("streak");
 
-function updateStreak() {
-  streakEl.textContent = `Streak: ${streak} 🔥`;
-  if (streak > 0) {
-    streakEl.style.transform = 'scale(1.2)';
-    streakEl.style.transition = 'transform 0.2s';
-    setTimeout(() => {
-      streakEl.style.transform = 'scale(1)';
-    }, 300);
-  }
-}
-
-// Call it once at start
-updateStreak();
-
-// Create board
+// Create gameboard
 for (let i = 0; i < MAX_ATTEMPTS; i++) {
   const row = document.createElement("div");
   row.classList.add("row");
@@ -88,12 +55,11 @@ for (let i = 0; i < MAX_ATTEMPTS; i++) {
   gameboard.appendChild(row);
 }
 
-// Keyboard keys (now includes ENTER and BACKSPACE)
-const KEYS = [
-  'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
-  'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
-  'ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'
-];
+// Keyboard click handlers
+document.querySelectorAll('.key').forEach(button => {
+  const key = button.textContent;
+  button.addEventListener('click', () => onKeyClick(key));
+});
 
 function onKeyClick(key) {
   if (gameOver) return;
@@ -102,9 +68,9 @@ function onKeyClick(key) {
   const currentRowEl = rows[currentRow];
   const letters = currentRowEl.children;
 
-  // Start background music on first interaction
+  // Start music on first interaction
   if (!bgMusic.isPlaying) {
-    bgMusic.play().catch(e => console.log("Music autoplay blocked — user must interact first"));
+    bgMusic.play().catch(e => console.log("Music autoplay blocked"));
     bgMusic.isPlaying = true;
   }
 
@@ -124,80 +90,57 @@ function onKeyClick(key) {
     currentGuess += key;
     letters[currentGuess.length - 1].textContent = key;
   }
-
-  // No need to update Submit button — it's gone!
 }
 
 function checkGuess() {
   const rows = gameboard.children;
   const currentRowEl = rows[currentRow];
   const letters = currentRowEl.children;
-  let feedback = "";
-
   let solutionArray = SOLUTION.split("");
 
-  // First pass: mark correct (green)
+  // Mark correct (green)
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (currentGuess[i] === SOLUTION[i]) {
       letters[i].classList.add("correct");
-      feedback += "🟦";
-      solutionArray[i] = null; // mark used
+      solutionArray[i] = null;
     }
   }
-  // Play correct letter sound
   playSound("correct");
 
-  // Second pass: mark present (yellow)
+  // Mark present (yellow)
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (letters[i].classList.contains("correct")) continue;
     const idx = solutionArray.indexOf(currentGuess[i]);
     if (idx !== -1) {
       letters[i].classList.add("present");
-      feedback += "🟨";
       solutionArray[idx] = null;
     } else {
       letters[i].classList.add("absent");
-      feedback += "⬛";
     }
   }
 
   if (currentGuess === SOLUTION) {
     gameOver = true;
-    gameWon = true; // ← Add this
+    gameWon = true;
     streak++;
     localStorage.setItem("wordBytesStreak", streak);
     updateStreak();
     playSound("win");
-
-    // Fade out music
     bgMusic.volume = 0.05;
     setTimeout(() => { bgMusic.volume = 0.2; }, 1000);
-
     alert(`🎉 You cracked the byte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}!\n\nShare your result and challenge your friends! 📲`);
-
-    // Auto-trigger share after win
-    setTimeout(() => {
-      shareBtn.click();
-    }, 1000);
-
+    setTimeout(() => shareBtn.click(), 1000);
   } else if (currentRow >= MAX_ATTEMPTS - 1) {
     gameOver = true;
-    gameWon = false; // ← Explicitly set
+    gameWon = false;
     streak = 0;
     localStorage.setItem("wordBytesStreak", 0);
     updateStreak();
     playSound("fail");
-
     alert(`💔 Tough one today! The word was: ${SOLUTION}\n\nThanks for playing! Share your result and come back tomorrow for a new challenge! 🌟`);
-
-    // Auto-trigger share after loss
-    setTimeout(() => {
-      shareBtn.click();
-    }, 1000);
-
+    setTimeout(() => shareBtn.click(), 1000);
   }
 
-  // Only move to next row if game is not over
   if (!gameOver) {
     currentRow++;
     currentGuess = "";
@@ -208,48 +151,82 @@ function flashMessage(msg) {
   alert(msg);
 }
 
-// Keyboard support
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") onKeyClick("ENTER");
-  else if (e.key === "Backspace") onKeyClick("⌫");
-  else {
-    const key = e.key.toUpperCase();
-    if (/[A-Z]/.test(key) && key.length === 1) onKeyClick(key);
-  }
-});
-// Register service worker
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => console.log('SW registered: ', reg))
-      .catch(err => console.log('SW registration failed: ', err));
-  });
-}
-// === How to Play Modal ===
+// === DOM ELEMENTS (after creation)
 const helpBtn = document.getElementById("help-btn");
 const helpModal = document.getElementById("help-modal");
 const closeModal = document.getElementById("close-modal");
+const legendToggle = document.getElementById("legend-toggle");
+const legendContent = document.getElementById("legend-content");
+const darkModeToggle = document.getElementById("dark-mode-toggle");
+const muteBtn = document.getElementById("mute-btn");
 
-// Show modal on first visit only
+// === HELP MODAL ===
 if (!localStorage.getItem("wordBytesSeenHelp")) {
   helpModal.style.display = "flex";
   localStorage.setItem("wordBytesSeenHelp", "true");
 }
-
-helpBtn.addEventListener("click", () => {
-  helpModal.style.display = "flex";
+helpBtn.addEventListener("click", () => helpModal.style.display = "flex");
+closeModal.addEventListener("click", () => helpModal.style.display = "none");
+window.addEventListener("click", (e) => {
+  if (e.target === helpModal) helpModal.style.display = "none";
 });
 
-closeModal.addEventListener("click", () => {
-  helpModal.style.display = "none";
+// === LEGEND TOGGLE ===
+legendToggle.addEventListener("click", () => {
+  const isExpanded = legendToggle.getAttribute("aria-expanded") === "true";
+  legendContent.style.display = isExpanded ? "none" : "block";
+  legendToggle.setAttribute("aria-expanded", !isExpanded);
+  legendToggle.textContent = !isExpanded ? "🎯 Color Guide (Tap to show)" : "🎯 Color Guide (Tap to hide)";
+});
+legendContent.style.display = "block";
+legendToggle.setAttribute("aria-expanded", "true");
+
+// === STREAK ===
+function updateStreak() {
+  streakEl.textContent = `Streak: ${streak} 🔥`;
+  if (streak > 0) {
+    streakEl.style.transform = 'scale(1.2)';
+    streakEl.style.transition = 'transform 0.2s';
+    setTimeout(() => streakEl.style.transform = 'scale(1)', 300);
+  }
+}
+updateStreak();
+
+// === DARK MODE ===
+const isDarkMode = localStorage.getItem("wordBytesDarkMode") === "true";
+if (isDarkMode) {
+  document.body.classList.add("dark-mode");
+  darkModeToggle.textContent = "☀️";
+}
+darkModeToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  const isDark = document.body.classList.contains("dark-mode");
+  localStorage.setItem("wordBytesDarkMode", isDark);
+  darkModeToggle.textContent = isDark ? "☀️" : "🌙";
 });
 
+// === MUTE TOGGLE ===
+let isMuted = localStorage.getItem("wordBytesMuted") === "true";
+if (isMuted) muteBtn.textContent = "🔇";
+muteBtn.addEventListener("click", () => {
+  isMuted = !isMuted;
+  muteBtn.textContent = isMuted ? "🔇" : "🔊";
+  localStorage.setItem("wordBytesMuted", isMuted);
+  if (isMuted) bgMusic.pause();
+  else bgMusic.play().catch(e => console.log("Music play failed:", e));
+});
+
+// === SPLASH SCREEN ===
+const splashScreen = document.getElementById("splash-screen");
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    splashScreen.classList.add('fade-out');
+    setTimeout(() => splashScreen.style.display = 'none', 1000);
+  }, 1500);
+});
 
 // === SMART SHARE BUTTON ===
 shareBtn.addEventListener("click", () => {
-  let message = "";
-
-  // Build emoji grid
   const rows = gameboard.children;
   let grid = "";
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
@@ -264,164 +241,41 @@ shareBtn.addEventListener("click", () => {
     if (row.trim()) grid += row + "\n";
   }
 
-  // Win vs Loss message
-  if (gameWon) {
-    message = `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app`;
-  } else {
-    message = `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app`;
-  }
+  const message = gameWon
+    ? `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app`
+    : `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app`;
 
-  // Try to use Web Share API (best experience)
   if (navigator.share) {
-    navigator.share({
-      title: "WordBytes",
-      text: message
-    }).catch(err => {
-      console.log("Share canceled", err);
-    });
-  } 
-  // Fallback 1: WhatsApp (mobile)
-  else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-  }
-  // Fallback 2: Clipboard (desktop)
-  else {
-    navigator.clipboard.writeText(message).then(() => {
-      alert("Result copied! 📲 Paste it into WhatsApp, Twitter, or anywhere to share!");
-    }).catch(() => {
-      prompt("Copy this to share:", message);
-    });
-  }
-});
-
-// Close modal if clicked outside
-window.addEventListener("click", (e) => {
-  if (e.target === helpModal) {
-    helpModal.style.display = "none";
-  }
-});
-
-// === Collapsible Legend ===
-const legendToggle = document.getElementById("legend-toggle");
-const legendContent = document.getElementById("legend-content");
-
-legendToggle.addEventListener("click", () => {
-  const isExpanded = legendToggle.getAttribute("aria-expanded") === "true";
-  legendContent.style.display = isExpanded ? "none" : "block";
-  legendToggle.setAttribute("aria-expanded", !isExpanded);
-  legendToggle.textContent = !isExpanded ? "🎯 Color Guide (Tap to show)" : "🎯 Color Guide (Tap to hide)";
-});
-
-// Initialize legend visibility
-legendContent.style.display = "block";
-legendToggle.setAttribute("aria-expanded", "true");
-
-// === Attach click events to static HTML keyboard ===
-document.querySelectorAll('.key').forEach(button => {
-  const key = button.textContent;
-
-  button.addEventListener('click', () => {
-    onKeyClick(key);
-  });
-});
-
-
-
-// === DARK MODE TOGGLE ===
-const darkModeToggle = document.getElementById("dark-mode-toggle");
-
-// Check saved preference
-const isDarkMode = localStorage.getItem("wordBytesDarkMode") === "true";
-if (isDarkMode) {
-  document.body.classList.add("dark-mode");
-  darkModeToggle.textContent = "☀️";
-}
-
-// Toggle mode
-darkModeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  const isDark = document.body.classList.contains("dark-mode");
-  localStorage.setItem("wordBytesDarkMode", isDark);
-  darkModeToggle.textContent = isDark ? "☀️" : "🌙";
-});
-
-// === MUTE TOGGLE ===
-const muteBtn = document.getElementById("mute-btn");
-
-// Check saved preference
-let isMuted = localStorage.getItem("wordBytesMuted") === "true";
-if (isMuted) {
-  muteBtn.textContent = "🔇";
-}
-
-// Toggle mute
-muteBtn.addEventListener("click", () => {
-  isMuted = !isMuted;
-  muteBtn.textContent = isMuted ? "🔇" : "🔊";
-  localStorage.setItem("wordBytesMuted", isMuted);
-
-  // Pause or resume background music
-  if (isMuted) {
-    bgMusic.pause();
+    navigator.share({ title: "WordBytes", text: message }).catch(() => console.log("Share canceled"));
+  } else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
   } else {
-    bgMusic.play().catch(e => console.log("Music play failed:", e));
+    navigator.clipboard.writeText(message).then(
+      () => alert("Result copied! 📲 Paste it to share!"),
+      () => prompt("Copy to share:", message)
+    );
   }
-
 });
 
-// Update playSound to respect mute
-function playSound(sound) {
-  if (isMuted) return; // Don't play if muted
-  const audio = new Audio(`sounds/${sound}.mp3`);
-  audio.volume = 0.3;
-  audio.play().catch(e => console.log("Audio play failed:", e));
-}
-
-// === SPLASH SCREEN ===
-const splashScreen = document.getElementById("splash-screen");
-
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    splashScreen.classList.add('fade-out');
-    setTimeout(() => {
-      splashScreen.style.display = 'none';
-    }, 1000);
-  }, 1500); // Show for 1.5 seconds
-});
-
-
+// === PROPELLER ADS ===
 window.addEventListener('load', () => {
   console.log("PropellerAds loaded?", typeof PropellerAds !== 'undefined');
-  console.log("PropellerAds.init exists?", typeof PropellerAds?.init === 'function');
+  if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
+    PropellerAds.init({ zoneId: '9775971', type: 'rewarded' });
+  } else {
+    setTimeout(() => {
+      if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
+        PropellerAds.init({ zoneId: '9775971', type: 'rewarded' });
+      } else {
+        console.error("PropellerAds not available");
+      }
+    }, 1000);
+  }
 });
-
-
-
-// Initialize PropellerAds
-if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
-  PropellerAds.init({
-    zoneId: '9775971',
-    type: 'rewarded'
-  });
-} else {
-  // Fallback: try again after 1 second
-  setTimeout(() => {
-    if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
-      PropellerAds.init({
-        zoneId: '9775971',
-        type: 'rewarded'
-      });
-    } else {
-      console.error("PropellerAds not available. Try using direct link.");
-    }
-  }, 1000);
-}
 
 // Hint button
 hintBtn.addEventListener("click", () => {
   if (gameOver) return;
-
   if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
     PropellerAds.show('rewarded', {
       callbacks: {
@@ -431,9 +285,7 @@ hintBtn.addEventListener("click", () => {
           const hintLetter = SOLUTION[randomIndex];
           alert(`🎯 Hint: The word contains '${hintLetter}'`);
         },
-        onAdSkipped: () => {
-          alert("You need to watch the full ad to get a hint.");
-        },
+        onAdSkipped: () => alert("You need to watch the full ad to get a hint."),
         onError: (err) => {
           console.error("Ad error:", err);
           alert("Ad not available. Try again later.");
@@ -445,14 +297,11 @@ hintBtn.addEventListener("click", () => {
   }
 });
 
-// Show banner ad
-if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
-  PropellerAds.show('banner', {
-    container: document.getElementById('ad-banner-top'),
-    callbacks: {
-      onError: (err) => {
-        console.error("Banner ad error:", err);
-      }
-    }
+// Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => console.log('SW registered: ', reg))
+      .catch(err => console.log('SW registration failed: ', err));
   });
 }

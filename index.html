@@ -15,123 +15,107 @@
   <meta property="og:image" content="https://wordbytes.app/social-preview.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@yourhandle">
-  <!-- Propeller Ads Rewarded Video -->
-<script src="https://staupsoaksy.net/act/files/tag.min.js?z=9776139" data-cfasync="false" async>
-  window.PropellerAds = window.PropellerAds || {};
-  window.PropellerAds.onReady = function() {
-    console.log("PropellerAds ready!");
-  };
-</script>
 
+  <!-- ✅ Official PropellerAds Script -->
+  <script async src="https://cdn.proplayerads.com/pa-v3.min.js"></script>
 </head>
 <body>
 
-<!-- Splash Screen -->
-<div id="splash-screen" class="splash">
-  <div class="splash-content">
-    <h1>WordBytes</h1>
-    <p>One 6-letter word. One daily challenge.</p>
+  <!-- Splash Screen -->
+  <div id="splash-screen" class="splash">
+    <div class="splash-content">
+      <h1>WordBytes</h1>
+      <p>One 6-letter word. One daily challenge.</p>
+    </div>
   </div>
-</div>
 
-<div class="container">
-  <div class="game-container">
+  <div class="container">
+    <div class="game-container">
 
-<!-- Top Banner Ad -->
-<div id="ad-banner-top" class="ad-banner">
-  <div class="logo">B</div>
-  <div class="ad-label">Ad</div>
-</div>
-
-<div class="ad-banner">
-  <div class="logo">B</div>
-  <div class="ad-label">Ad</div>
-</div>
-
-
-    <h1>WordBytes</h1>
-    <p class="tagline">One 6-letter word. One daily challenge.</p>
-
-<div class="top-controls">
-  <button id="dark-mode-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-  <button id="help-btn" class="help-btn" aria-label="How to play">ℹ️</button>
-  <button id="mute-btn" class="mute-btn" aria-label="Mute sound">🔊</button>
-</div>
-
-    <div id="gameboard"></div>
-
-    <!-- Keyboard -->
-    <div class="keyboard" id="keyboard">
-      <!-- Row 1 -->
-      <div class="key-row">
-        <div class="key">Q</div>
-        <div class="key">W</div>
-        <div class="key">E</div>
-        <div class="key">R</div>
-        <div class="key">T</div>
-        <div class="key">Y</div>
-        <div class="key">U</div>
-        <div class="key">I</div>
-        <div class="key">O</div>
-        <div class="key">P</div>
+      <!-- Top Ad Banner -->
+      <div id="ad-banner-top" class="ad-banner">
+        <div class="logo">B</div>
+        <div class="ad-label">Ad</div>
       </div>
 
-      <!-- Row 2 -->
-      <div class="key-row">
-        <div class="key">A</div>
-        <div class="key">S</div>
-        <div class="key">D</div>
-        <div class="key">F</div>
-        <div class="key">G</div>
-        <div class="key">H</div>
-        <div class="key">J</div>
-        <div class="key">K</div>
-        <div class="key">L</div>
+      <h1>WordBytes</h1>
+      <p class="tagline">One 6-letter word. One daily challenge.</p>
+
+      <div class="top-controls">
+        <button id="dark-mode-toggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
+        <button id="help-btn" class="help-btn" aria-label="How to play">ℹ️</button>
+        <button id="mute-btn" class="mute-btn" aria-label="Mute sound">🔊</button>
       </div>
 
-      <!-- Row 3 -->
-      <div class="key-row">
-        <div class="key">Z</div>
-        <div class="key">X</div>
-        <div class="key">C</div>
-        <div class="key">V</div>
-        <div class="key">B</div>
-        <div class="key">N</div>
-        <div class="key">M</div>
-        <div class="key backspace">⌫</div>
-        <div class="key enter" data-tooltip="Press to submit your guess">ENTER</div>
+      <div id="gameboard"></div>
+
+      <!-- Keyboard -->
+      <div class="keyboard" id="keyboard">
+        <div class="key-row">
+          <div class="key">Q</div>
+          <div class="key">W</div>
+          <div class="key">E</div>
+          <div class="key">R</div>
+          <div class="key">T</div>
+          <div class="key">Y</div>
+          <div class="key">U</div>
+          <div class="key">I</div>
+          <div class="key">O</div>
+          <div class="key">P</div>
+        </div>
+        <div class="key-row">
+          <div class="key">A</div>
+          <div class="key">S</div>
+          <div class="key">D</div>
+          <div class="key">F</div>
+          <div class="key">G</div>
+          <div class="key">H</div>
+          <div class="key">J</div>
+          <div class="key">K</div>
+          <div class="key">L</div>
+        </div>
+        <div class="key-row">
+          <div class="key">Z</div>
+          <div class="key">X</div>
+          <div class="key">C</div>
+          <div class="key">V</div>
+          <div class="key">B</div>
+          <div class="key">N</div>
+          <div class="key">M</div>
+          <div class="key backspace">⌫</div>
+          <div class="key enter" data-tooltip="Press to submit your guess">ENTER</div>
+        </div>
       </div>
-    </div>
 
-    <div class="controls">
-      <button id="hint-btn" data-tooltip="Watch a short ad to reveal a letter">💡 Hint (Watch Ad)</button>
-      <button id="share-btn" data-tooltip="Copy your result to share with friends!">📤 Share Result</button>
-    </div>
+      <div class="controls">
+        <button id="hint-btn" data-tooltip="Watch a short ad to reveal a letter">💡 Hint (Watch Ad)</button>
+        <button id="share-btn" data-tooltip="Copy your result to share with friends!">📤 Share Result</button>
+      </div>
 
-    <p class="streak" id="streak">Streak: 0 🔥</p>
+      <p class="streak" id="streak">Streak: 0 🔥</p>
 
-    <!-- Legend (Below Controls) -->
-    <div class="legend-container">
-      <button id="legend-toggle" class="legend-toggle" aria-expanded="true">
-        🎯 Color Guide (Tap to hide)
-      </button>
-      <div id="legend-content" class="legend-content">
-        <p><span class="legend-box correct"></span> = Correct letter, correct position</p>
-        <p><span class="legend-box present"></span> = Correct letter, wrong position</p>
-        <p><span class="legend-box absent"></span> = Not in the word</p>
+      <!-- Legend -->
+      <div class="legend-container">
+        <button id="legend-toggle" class="legend-toggle" aria-expanded="true">
+          🎯 Color Guide (Tap to hide)
+        </button>
+        <div id="legend-content" class="legend-content">
+          <p><span class="legend-box correct"></span> = Correct letter, correct position</p>
+          <p><span class="legend-box present"></span> = Correct letter, wrong position</p>
+          <p><span class="legend-box absent"></span> = Not in the word</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-  <!-- How to Play Modal -->
+  <!-- Help Modal -->
   <div id="help-modal" class="modal">
     <div class="modal-content">
       <h2>🎯 How to Play WordBytes</h2>
       <ol>
         <li>Guess the 6-letter word in 6 tries.</li>
         <li>Type letters using the on-screen keyboard.</li>
-        <li>Press <strong>ENTER</strong> on the keyboard to submit your guess.</li>
+        <li>Press <strong>ENTER</strong> to submit.</li>
         <li>Letters will turn:</li>
         <ul>
           <li>🟦 <strong>Blue</strong> = Right letter, right position</li>
