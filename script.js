@@ -242,8 +242,41 @@ closeModal.addEventListener("click", () => {
 });
 
 
+// Enhanced share (uses Web Share API if available)
+shareBtn.addEventListener("click", () => {
+  const rows = gameboard.children;
+  let result = `WordBytes ${streak} 🔥\n\n`;
 
+  for (let i = 0; i < MAX_ATTEMPTS; i++) {
+    const letters = rows[i].children;
+    let row = "";
+    for (let j = 0; j < WORD_LENGTH; j++) {
+      if (letters[j].classList.contains("correct")) row += "🟦";
+      else if (letters[j].classList.contains("present")) row += "🟨";
+      else if (letters[j].classList.contains("absent")) row += "⬛";
+      else row += "⬜";
+    }
+    if (row.trim()) result += row + "\n";
+  }
+  result += `\nPlay free: https://wordbytes.app`;
 
+  // Try Web Share API (mobile)
+  if (navigator.share) {
+    navigator.share({
+      title: "WordBytes",
+      text: result
+    }).catch(err => console.log("Share canceled", err));
+  } else {
+    // Fallback: copy to clipboard
+    navigator.clipboard.writeText(result)
+      .then(() => {
+        alert("Result copied! 📲 Paste it to share!");
+      })
+      .catch(() => {
+        alert("Copy failed. Please share manually.");
+      });
+  }
+});
 
 // Close modal if clicked outside
 window.addEventListener("click", (e) => {
