@@ -101,9 +101,9 @@ body {
 
 /* === RESPONSIVE GAME CONTAINER === */
 .game-container {
-  padding-top: 120px; /* Push content down */
+  margin-top: 120px; /* ✅ Now works: pushes container down */
   width: 100%;
-  max-width: 800px;
+  max-width: 300px; /* Match banner width */
   background: white;
   border-radius: 20px;
   padding: 16px;
@@ -469,9 +469,8 @@ h1 {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 300px;
+  max-width: 300px; /* Match game container width */
   width: 100%;
-  margin: 0 auto;
   height: auto;
   display: flex;
   justify-content: center;
@@ -490,6 +489,7 @@ h1 {
   height: auto;
   border-radius: 8px;
 }
+
 
 .ad-banner .logo {
   font-size: 1.2rem;
