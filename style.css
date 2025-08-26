@@ -233,9 +233,13 @@ h1 {
   display: flex;
   justify-content: center;
   gap: 6px;
-  /* Default: wrap on small screens */
   flex-wrap: wrap;
   width: 100%;
+}
+
+/* Row 3: Z X C V B N M ENTER ⌫ */
+.key-row:nth-child(3) {
+  flex-direction: row-reverse;
 }
 
 /* On large screens: prevent wrap */
@@ -404,6 +408,24 @@ h1 {
   clip: rect(0,0,0,0);
   white-space: nowrap;
   border: 0;
+}
+
+.top-ad {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: white;
+  border-bottom: 1px solid #eee;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
 }
 
 .ad-banner {
