@@ -61,6 +61,20 @@ const shareBtn = document.getElementById("share-btn");
 const hintBtn = document.getElementById("hint-btn");
 const streakEl = document.getElementById("streak");
 
+function updateStreak() {
+  streakEl.textContent = `Streak: ${streak} 🔥`;
+  if (streak > 0) {
+    streakEl.style.transform = 'scale(1.2)';
+    streakEl.style.transition = 'transform 0.2s';
+    setTimeout(() => {
+      streakEl.style.transform = 'scale(1)';
+    }, 300);
+  }
+}
+
+// Call it once at start
+updateStreak();
+
 // Create board
 for (let i = 0; i < MAX_ATTEMPTS; i++) {
   const row = document.createElement("div");
