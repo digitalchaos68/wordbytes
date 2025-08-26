@@ -101,7 +101,7 @@ body {
 
 /* === RESPONSIVE GAME CONTAINER === */
 .game-container {
-  margin-top: 120px; /* ✅ Now works: pushes container down */
+  margin-top: 300px; /* ✅ Now works: pushes container down */
   width: 100%;
   max-width: 300px; /* Match banner width */
   background: white;
