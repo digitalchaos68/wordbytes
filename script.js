@@ -273,29 +273,6 @@ window.addEventListener('load', () => {
   }
 });
 
-// Hint button
-hintBtn.addEventListener("click", () => {
-  if (gameOver) return;
-  if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
-    PropellerAds.show('rewarded', {
-      callbacks: {
-        onAdStarted: () => console.log("Ad started"),
-        onAdRewarded: () => {
-          const randomIndex = Math.floor(Math.random() * WORD_LENGTH);
-          const hintLetter = SOLUTION[randomIndex];
-          alert(`🎯 Hint: The word contains '${hintLetter}'`);
-        },
-        onAdSkipped: () => alert("You need to watch the full ad to get a hint."),
-        onError: (err) => {
-          console.error("Ad error:", err);
-          alert("Ad not available. Try again later.");
-        }
-      }
-    });
-  } else {
-    alert("Ad system loading... Please wait a few seconds and try again.");
-  }
-});
 
 // Service Worker
 if ('serviceWorker' in navigator) {
@@ -305,3 +282,39 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.log('SW registration failed: ', err));
   });
 }
+
+// === LOAD BANNER AD ===
+window.addEventListener('load', () => {
+  // Wait a moment for SDK to initialize
+  setTimeout(() => {
+    if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
+      console.log("PropellerAds detected. Loading banner...");
+
+      PropellerAds.show('banner', {
+        container: document.getElementById('ad-banner-top'),
+        zoneId: '9775971',
+        callbacks: {
+          onAdLoaded: () => {
+            console.log("✅ Banner ad loaded!");
+            document.getElementById('ad-banner-top').style.height = 'auto';
+          },
+          onError: (err) => {
+            console.error("❌ Banner ad failed:", err);
+            document.getElementById('ad-banner-top').innerHTML = '<div class="ad-label">Ad failed to load</div>';
+          }
+        }
+      });
+    } else {
+      console.warn("PropellerAds not available. Retrying...");
+      // Retry after 2 seconds
+      setTimeout(() => {
+        if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.show === 'function') {
+          PropellerAds.show('banner', {
+            container: document.getElementById('ad-banner-top'),
+            zoneId: '9775971'
+          });
+        }
+      }, 2000);
+    }
+  }, 1000);
+});
