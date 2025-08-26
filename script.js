@@ -52,6 +52,7 @@ const WORD_LENGTH = 6;
 let currentRow = 0;
 let currentGuess = "";
 let gameOver = false;
+let gameWon = false; // Track if player won
 let streak = parseInt(localStorage.getItem("wordBytesStreak")) || 0;
 
 // DOM
@@ -162,6 +163,7 @@ function checkGuess() {
 
   if (currentGuess === SOLUTION) {
     gameOver = true;
+    gameWon = true; // ← Add this
     streak++;
     localStorage.setItem("wordBytesStreak", streak);
     updateStreak();
@@ -180,6 +182,7 @@ function checkGuess() {
 
   } else if (currentRow >= MAX_ATTEMPTS - 1) {
     gameOver = true;
+    gameWon = false; // ← Explicitly set
     streak = 0;
     localStorage.setItem("wordBytesStreak", 0);
     updateStreak();
@@ -242,11 +245,13 @@ closeModal.addEventListener("click", () => {
 });
 
 
-// Enhanced share (uses Web Share API if available)
+// === SMART SHARE BUTTON ===
 shareBtn.addEventListener("click", () => {
-  const rows = gameboard.children;
-  let result = `WordBytes ${streak} 🔥\n\n`;
+  let message = "";
 
+  // Build emoji grid
+  const rows = gameboard.children;
+  let grid = "";
   for (let i = 0; i < MAX_ATTEMPTS; i++) {
     const letters = rows[i].children;
     let row = "";
@@ -256,25 +261,37 @@ shareBtn.addEventListener("click", () => {
       else if (letters[j].classList.contains("absent")) row += "⬛";
       else row += "⬜";
     }
-    if (row.trim()) result += row + "\n";
+    if (row.trim()) grid += row + "\n";
   }
-  result += `\nPlay free: https://wordbytes.app`;
 
-  // Try Web Share API (mobile)
+  // Win vs Loss message
+  if (gameWon) {
+    message = `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app`;
+  } else {
+    message = `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app`;
+  }
+
+  // Try to use Web Share API (best experience)
   if (navigator.share) {
     navigator.share({
       title: "WordBytes",
-      text: result
-    }).catch(err => console.log("Share canceled", err));
-  } else {
-    // Fallback: copy to clipboard
-    navigator.clipboard.writeText(result)
-      .then(() => {
-        alert("Result copied! 📲 Paste it to share!");
-      })
-      .catch(() => {
-        alert("Copy failed. Please share manually.");
-      });
+      text: message
+    }).catch(err => {
+      console.log("Share canceled", err);
+    });
+  } 
+  // Fallback 1: WhatsApp (mobile)
+  else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  }
+  // Fallback 2: Clipboard (desktop)
+  else {
+    navigator.clipboard.writeText(message).then(() => {
+      alert("Result copied! 📲 Paste it into WhatsApp, Twitter, or anywhere to share!");
+    }).catch(() => {
+      prompt("Copy this to share:", message);
+    });
   }
 });
 
