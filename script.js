@@ -130,7 +130,7 @@ function checkGuess() {
     }
   }
   // Play correct letter sound
-playSound("correct");
+  playSound("correct");
 
   // Second pass: mark present (yellow)
   for (let i = 0; i < WORD_LENGTH; i++) {
@@ -151,72 +151,41 @@ playSound("correct");
     streak++;
     localStorage.setItem("wordBytesStreak", streak);
     updateStreak();
-    playSound("win"); // ← Add this
+    playSound("win");
 
-  // Fade out music
-  bgMusic.volume = 0.05;
-  setTimeout(() => { bgMusic.volume = 0.2; }, 1000);
+    // Fade out music
+    bgMusic.volume = 0.05;
+    setTimeout(() => { bgMusic.volume = 0.2; }, 1000);
 
-  alert(`🎉 You cracked the byte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}!\n\nShare your result and challenge your friends! 📲`);
-// Auto-trigger share after win
-setTimeout(() => {
-  shareBtn.click();
-}, 1000);
+    alert(`🎉 You cracked the byte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}!\n\nShare your result and challenge your friends! 📲`);
 
+    // Auto-trigger share after win
+    setTimeout(() => {
+      shareBtn.click();
+    }, 1000);
 
-} else if (currentRow >= MAX_ATTEMPTS - 1) {
+  } else if (currentRow >= MAX_ATTEMPTS - 1) {
     gameOver = true;
     streak = 0;
     localStorage.setItem("wordBytesStreak", 0);
     updateStreak();
-    playSound("fail"); // ← Add this
-   alert(`💔 Tough one today! The word was: ${SOLUTION}\n\nThanks for playing! Share your result and come back tomorrow for a new challenge! 🌟`);
+    playSound("fail");
 
-// Auto-trigger share after win
-setTimeout(() => {
-  shareBtn.click();
-}, 1000);
+    alert(`💔 Tough one today! The word was: ${SOLUTION}\n\nThanks for playing! Share your result and come back tomorrow for a new challenge! 🌟`);
 
+    // Auto-trigger share after loss
+    setTimeout(() => {
+      shareBtn.click();
+    }, 1000);
 
-  currentRow++;
-  currentGuess = "";
-}
-
-
-function updateStreak() {
-  streakEl.textContent = `Streak: ${streak} 🔥`;
-}
-
-updateStreak();
-
-// Share result
-shareBtn.addEventListener("click", () => {
-  const rows = gameboard.children;
-  let result = `WordBytes ${streak}\n`;
-  for (let i = 0; i < MAX_ATTEMPTS; i++) {
-    const letters = rows[i].children;
-    let row = "";
-    for (let j = 0; j < WORD_LENGTH; j++) {
-      if (letters[j].classList.contains("correct")) row += "🟦";
-      else if (letters[j].classList.contains("present")) row += "🟨";
-      else if (letters[j].classList.contains("absent")) row += "⬛";
-      else row += "⬜";
-    }
-    if (row.trim()) result += row + "\n";
   }
-  result += `https://wordbytes.app`;
 
-  navigator.clipboard.writeText(result).then(() => {
-    alert("Result copied! Paste it anywhere to share 📲");
-  });
-});
-
-// Hint button (simulate rewarded ad)
-hintBtn.addEventListener("click", () => {
-  if (gameOver) return;
-  // In real app: trigger Propeller Ads rewarded video
-  alert("🎯 [Ad would play] → Here's a hint: The word contains the letter '" + SOLUTION[Math.floor(Math.random() * SOLUTION.length)] + "'");
-});
+  // Only move to next row if game is not over
+  if (!gameOver) {
+    currentRow++;
+    currentGuess = "";
+  }
+}
 
 function flashMessage(msg) {
   alert(msg);
