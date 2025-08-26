@@ -301,31 +301,37 @@ window.addEventListener('load', () => {
     }
   }, 1000);
 });
-// === HINT BUTTON → OPEN DIRECT AD LINK ===
+
+// === HINT BUTTON – SHOW AD POPUP & GIVE HINT ON CLOSE ===
 hintBtn.addEventListener("click", () => {
   if (gameOver) return;
 
-  // Open ad in popup
+  // Ask user to confirm they want to watch the ad
+  const confirmed = confirm("🎯 Watch a short ad to get a hint? (Close the popup to return)");
+  if (!confirmed) return; // If they cancel, do nothing
+
+  // Open ad in popup window
   const adPopup = window.open(
     'https://otieu.com/4/9777670',
     'propeller_ads',
     'width=380,height=600,resizable,scrollbars=yes'
   );
 
-  
+  // Check if popup was blocked
   if (!adPopup) {
-    alert("Please allow popups to watch the ad.");
+    alert("⚠️ Please allow popups to watch the ad.");
     return;
   }
 
-  // Poll to detect when popup is closed
+  // Poll every 500ms to detect when popup is closed
   const checkPopup = setInterval(() => {
     if (adPopup.closed) {
-      clearInterval(checkPopup);
-      // Simulate ad watched → give hint
+      clearInterval(checkPopup); // Stop checking
+
+      // After ad is closed, give the hint
       const randomIndex = Math.floor(Math.random() * WORD_LENGTH);
       const hintLetter = SOLUTION[randomIndex];
-      alert(`🎯 Hint: The word contains '${hintLetter}'`);
+      alert(`💡 The word contains the letter '${hintLetter}'.`);
     }
   }, 500);
 });
