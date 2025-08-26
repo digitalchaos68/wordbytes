@@ -329,18 +329,3 @@ hintBtn.addEventListener("click", () => {
   }
 });
 
-// === PROPELLER ADS ===
-window.addEventListener('load', () => {
-  console.log("PropellerAds loaded?", typeof PropellerAds !== 'undefined');
-  if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
-    PropellerAds.init({ zoneId: '9776139', type: 'rewarded' });
-  } else {
-    setTimeout(() => {
-      if (typeof PropellerAds !== 'undefined' && typeof PropellerAds.init === 'function') {
-        PropellerAds.init({ zoneId: '9776139', type: 'rewarded' });
-      } else {
-        console.error("PropellerAds not available");
-      }
-    }, 1000);
-  }
-});
