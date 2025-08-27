@@ -114,6 +114,10 @@ body {
   margin: 0 auto;
   position: relative;
 }
+/* Update this selector to target the h1 directly */
+.game-container h1 {
+  margin-top: 300px;;
+}
 
 
 /* === TITLE & TAGLINE (scale up slightly) === */
