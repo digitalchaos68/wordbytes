@@ -9,6 +9,9 @@
     padding: 12px;
     max-width: 280px;
   }
+  .ad-banner {
+    max-width: 280px;
+  }
 
   .letter {
     font-size: 1.4rem;
@@ -24,7 +27,9 @@
   .key-row {
     flex-wrap: nowrap;
   }
-
+  .ad-banner {
+    max-width: 500px;
+  }
   .keyboard {
     width: 100%;
     max-width: 500px;
