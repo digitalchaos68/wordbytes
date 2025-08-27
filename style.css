@@ -466,13 +466,14 @@ h1 {
   border-top-right-radius: 20px;
 }
 
+/* === RESPONSIVE AD BANNER === */
 .ad-banner {
   position: fixed;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 800px; /* Match game container width */
   width: 100%;
+  max-width: 280px; /* Default for smallest screens */
   height: auto;
   display: flex;
   justify-content: center;
@@ -487,11 +488,40 @@ h1 {
 
 .ad-banner img {
   width: 100%;
-  max-width: 800px;
+  max-width: 280px;
   height: auto;
   border-radius: 8px;
 }
 
+/* On small screens (320px–539px) */
+@media (min-width: 320px) and (max-width: 539px) {
+  .ad-banner {
+    max-width: 300px;
+  }
+  .ad-banner img {
+    max-width: 300px;
+  }
+}
+
+/* On medium screens (540px–799px) */
+@media (min-width: 540px) and (max-width: 799px) {
+  .ad-banner {
+    max-width: 500px;
+  }
+  .ad-banner img {
+    max-width: 500px;
+  }
+}
+
+/* On large screens (800px+) */
+@media (min-width: 800px) {
+  .ad-banner {
+    max-width: 800px;
+  }
+  .ad-banner img {
+    max-width: 800px;
+  }
+}
 
 .ad-banner .logo {
   font-size: 1.2rem;
