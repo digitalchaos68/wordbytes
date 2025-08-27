@@ -516,10 +516,10 @@ h1 {
 /* On large screens (800px+) */
 @media (min-width: 800px) {
   .ad-banner {
-    max-width: 500px;
+    max-width: 480px;
   }
   .ad-banner img {
-    max-width: 500px;
+    max-width: 480px;
   }
 }
 
