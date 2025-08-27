@@ -189,6 +189,11 @@ function updateStreak() {
     streakEl.style.transition = 'transform 0.2s';
     setTimeout(() => streakEl.style.transform = 'scale(1)', 300);
   }
+  if (streak >= 3) {
+  streakEl.textContent = `Streak: ${streak} 🔥`;
+} else if (streak >= 7) {
+  streakEl.textContent = `Streak: ${streak} 🌟`;
+}
 }
 updateStreak();
 
