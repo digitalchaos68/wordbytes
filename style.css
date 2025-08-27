@@ -506,20 +506,20 @@ h1 {
 /* On medium screens (540px–799px) */
 @media (min-width: 540px) and (max-width: 799px) {
   .ad-banner {
-    max-width: 450px;
+    max-width: 440px;
   }
   .ad-banner img {
-    max-width: 450px;
+    max-width: 440px;
   }
 }
 
 /* On large screens (800px+) */
 @media (min-width: 800px) {
   .ad-banner {
-    max-width: 450px;
+    max-width: 440px;
   }
   .ad-banner img {
-    max-width: 450px;
+    max-width: 440px;
   }
 }
 
