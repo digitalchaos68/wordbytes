@@ -164,8 +164,8 @@ h1 {
 /* Help Button */
 .help-btn {
   position: absolute;
-  top: 100px;
-  right: 20px;
+  top: 110px;
+  right: 25px;
   background: none;
   border: none;
   font-size: 1.2rem;
