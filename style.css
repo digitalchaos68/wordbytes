@@ -116,7 +116,7 @@ body {
 }
 /* Update this selector to target the h1 directly */
 .game-container h1 {
-  margin-top: 120px;;
+  margin-top: 100px;;
 }
 
 
@@ -164,7 +164,7 @@ h1 {
 /* Help Button */
 .help-btn {
   position: absolute;
-  top: 180px;
+  top: 100px;
   right: 20px;
   background: none;
   border: none;
