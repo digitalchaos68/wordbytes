@@ -115,10 +115,7 @@ body {
   position: relative;
 }
 
-.header {
-  margin-top: 300px; /* ✅ Now works: pushes container down */
 
-}
 /* === TITLE & TAGLINE (scale up slightly) === */
 h1 {
   font-size: 2.4rem;
