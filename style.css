@@ -103,7 +103,7 @@ body {
 .game-container {
   margin-top: 300px; /* ✅ Now works: pushes container down */
   width: 100%;
-  max-width: 300px; /* Match banner width */
+  max-width: 800px; /* Match banner width */
   background: white;
   border-radius: 20px;
   padding: 16px;
