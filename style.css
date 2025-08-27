@@ -496,30 +496,30 @@ h1 {
 /* On small screens (320px–539px) */
 @media (min-width: 320px) and (max-width: 539px) {
   .ad-banner {
-    max-width: 300px;
+    max-width: 320px;
   }
   .ad-banner img {
-    max-width: 300px;
+    max-width: 320px;
   }
 }
 
 /* On medium screens (540px–799px) */
 @media (min-width: 540px) and (max-width: 799px) {
   .ad-banner {
-    max-width: 440px;
+    max-width: 420px;
   }
   .ad-banner img {
-    max-width: 440px;
+    max-width: 420px;
   }
 }
 
 /* On large screens (800px+) */
 @media (min-width: 800px) {
   .ad-banner {
-    max-width: 440px;
+    max-width: 420px;
   }
   .ad-banner img {
-    max-width: 440px;
+    max-width: 420px;
   }
 }
 
