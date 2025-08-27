@@ -471,7 +471,7 @@ h1 {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 320px; /* Match game container width */
+  max-width: 800px; /* Match game container width */
   width: 100%;
   height: auto;
   display: flex;
