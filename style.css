@@ -9,6 +9,10 @@
     padding: 12px;
     max-width: 280px;
   }
+  .dark-mode .game-container {
+    padding: 12px;
+    max-width: 280px;
+  }
   .letter {
     font-size: 1.4rem;
   }
@@ -501,6 +505,12 @@ h1 {
   .ad-banner img {
     max-width: 350px;
   }
+  .dark-mode .ad-banner {
+    max-width: 350px;
+  }
+  .dark-mode .ad-banner img {
+    max-width: 350px;
+  }
 }
 
 /* On medium screens (540px–799px) */
@@ -511,6 +521,12 @@ h1 {
   .ad-banner img {
     max-width: 420px;
   }
+  .dark-mode .ad-banner {
+    max-width: 420px;
+  }
+  .dark-mode .ad-banner img {
+    max-width: 420px;
+  }
 }
 
 /* On large screens (800px+) */
@@ -519,6 +535,12 @@ h1 {
     max-width: 420px;
   }
   .ad-banner img {
+    max-width: 420px;
+  }
+  .dark-mode .ad-banner {
+    max-width: 420px;
+  }
+  .dark-mode .ad-banner img {
     max-width: 420px;
   }
 }
