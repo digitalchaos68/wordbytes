@@ -415,7 +415,15 @@ function shareOnLinkedIn() {
 
 function shareOnWhatsApp() {
   const message = encodeURIComponent(currentShareMessage);
-  window.open(`https://wa.me/?text=${message}`, '_blank');
+  const url = 'whatsapp://send?text=' + message;
+
+  if (!navigator.canShare) {
+    // Fallback: Open WhatsApp Web
+    window.open('https://wa.me/?text=' + message, '_blank');
+  } else {
+    // Try to open WhatsApp app
+    window.open(url, '_blank');
+  }
 }
 
 function shareOnTelegram() {
