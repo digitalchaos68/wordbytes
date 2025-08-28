@@ -323,33 +323,65 @@ shareBtn.addEventListener("click", () => {
     if (row.trim()) grid += row + "\n";
   }
 
-  const message = gameWon
-    ? `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app  `
-    : `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app  `;
+  const isWin = gameWon;
+  const attempts = currentRow + 1;
+  const emojiResult = isWin
+    ? `I cracked today’s WordByte in ${attempts} ${attempts === 1 ? 'try' : 'tries'}! 🎉\n\n${grid}`
+    : `Tried today’s WordByte — tough one! 💔\n\n${grid}`;
 
-  let method;
+  const shareText = `${emojiResult}\nPlay free: https://wordbytes.app`;
 
-  if (navigator.share) {
-    navigator.share({ title: "WordBytes", text: message }).catch(() => console.log("Share canceled"));
-    method = 'native';
-  } else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-    method = 'whatsapp';
+  // Open share menu based on platform
+  if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    // Mobile: Use native share
+    navigator.share({ title: "WordBytes", text: shareText });
   } else {
-    navigator.clipboard.writeText(message).then(
-      () => alert("Result copied! 📲 Paste it to share!"),
-      () => prompt("Copy to share:", message)
-    );
-    method = 'clipboard';
+    // Desktop: Show custom share modal or open social links
+    showShareModal(shareText);
   }
 
-  // 🔍 GA4: Track share
+  // 🔍 GA4: Track share (same as before)
   gtag('event', 'share_action', {
-    'method': method,
-    'game_result': gameWon ? 'win' : 'loss',
+    'method': navigator.share ? 'native' : 'social_modal',
+    'game_result': isWin ? 'win' : 'loss',
     'streak_at_share': streak
   });
 });
+
+
+function showShareModal(shareText) {
+  const modal = document.getElementById('share-modal');
+  modal.style.display = 'flex';
+  window.currentShareText = shareText; // Store for reuse
+}
+
+function closeShareModal() {
+  document.getElementById('share-modal').style.display = 'none';
+}
+
+function shareOnX() {
+  const text = encodeURIComponent(window.currentShareText);
+  window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank', 'width=600,height=400');
+}
+
+function shareOnFacebook() {
+  const url = encodeURIComponent('https://wordbytes.app');
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+}
+
+function shareOnLinkedIn() {
+  const url = encodeURIComponent('https://wordbytes.app');
+  const title = encodeURIComponent("I played WordBytes today!");
+  const summary = encodeURIComponent("A fun daily 6-letter word puzzle — free to play!");
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}&summary=${summary}`, '_blank', 'width=600,height=400');
+}
+
+function copyToClipboard() {
+  navigator.clipboard.writeText(window.currentShareText).then(() => {
+    alert("Result copied! 📲 Paste it anywhere!");
+    closeShareModal();
+  });
+}
 
 // Service Worker
 if ('serviceWorker' in navigator) {
