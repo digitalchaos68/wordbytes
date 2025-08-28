@@ -323,76 +323,60 @@ shareBtn.addEventListener("click", () => {
     if (row.trim()) grid += row + "\n";
   }
 
-  // ✅ Use your original win/loss message format
   const message = gameWon
     ? `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app  `
     : `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app  `;
 
-  // 🔗 URL-encode for social links
-  const encodedMessage = encodeURIComponent(message);
-  const url = encodeURIComponent('https://wordbytes.app');
+  // ✅ Check if it's desktop (no native share needed)
+  const isDesktop = !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  // 📱 MOBILE: Use native share or WhatsApp
-  if (navigator.share) {
-    navigator.share({ title: "WordBytes", text: message }).catch(() => console.log("Share canceled"));
-  } else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+  if (isDesktop) {
+    // Always show custom modal on desktop
+    showShareModal(message);
   } else {
-    // 💻 DESKTOP: Show modal with ALL options (keep clipboard + add social)
-    showShareModal(message, encodedMessage, url);
+    // Mobile: Use native share or WhatsApp fallback
+    if (navigator.share) {
+      navigator.share({ title: "WordBytes", text: message }).catch(() => console.log("Share canceled"));
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    }
   }
 
-  // 🔍 GA4: Track share (method depends on platform)
-  let shareMethod;
-  if (navigator.share) {
-    shareMethod = 'native';
-  } else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    shareMethod = 'whatsapp';
-  } else {
-    shareMethod = 'desktop_modal';
-  }
-
+  // 🔍 GA4: Track share method
+  const method = isDesktop ? 'desktop_modal' : navigator.share ? 'native' : 'whatsapp';
   gtag('event', 'share_action', {
-    'method': shareMethod,
+    'method': method,
     'game_result': gameWon ? 'win' : 'loss',
     'streak_at_share': streak
   });
 });
+
 // Store message for reuse
 let currentShareMessage = '';
-
-function showShareModal(message, encodedMessage, url) {
-  currentShareMessage = message;
+function showShareModal(message) {
   document.getElementById('share-modal').style.display = 'flex';
-
-  // Optional: Pre-fill LinkedIn with better text
-  window.encodedMessageForSocials = encodedMessage;
-  window.urlForSocials = url;
+  window.currentShareMessage = message;
 }
 
 function closeShareModal() {
   document.getElementById('share-modal').style.display = 'none';
 }
 
-// 🐦 Share on X (Twitter)
 function shareOnX() {
-  const tweet = `Check out WordBytes – a fun daily 6-letter word puzzle! ${window.encodedMessageForSocials}`;
-  window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank', 'width=600,height=400');
+  const tweet = `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\n\nPlay free: https://wordbytes.app #WordBytes`;
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`, '_blank', 'width=600,height=400');
 }
 
-// 📘 Share on Facebook
 function shareOnFacebook() {
-  window.open(`https://www.facebook.com/sharer/sharer.php?u=https://wordbytes.app&quote=${window.encodedMessageForSocials}`, '_blank', 'width=600,height=400');
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=https://wordbytes.app&quote=${encodeURIComponent(currentShareMessage)}`, '_blank', 'width=600,height=400');
 }
 
-// 💼 Share on LinkedIn
 function shareOnLinkedIn() {
   const title = encodeURIComponent("I played WordBytes today!");
-  const summary = window.encodedMessageForSocials;
+  const summary = encodeURIComponent(currentShareMessage);
   window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://wordbytes.app&title=${title}&summary=${summary}`, '_blank', 'width=600,height=400');
 }
 
-// 📋 Copy to Clipboard (your original fallback)
 function copyToClipboard() {
   navigator.clipboard.writeText(currentShareMessage).then(
     () => {
