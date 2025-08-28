@@ -634,3 +634,11 @@ body.dark-mode {
 
 .dark-mode .ad-banner .logo { color: #4a9eff; }
 .dark-mode .ad-banner .ad-label { color: #aaa; }   
+
+
+#custom-share-message {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  resize: vertical;
+}

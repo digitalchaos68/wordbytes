@@ -360,27 +360,25 @@ shareBtn.addEventListener("click", () => {
     if (row.trim()) grid += row + "\n";
   }
 
-  const message = gameWon
+  // Base message
+  const baseMessage = gameWon
     ? `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app`
     : `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app`;
 
-  currentShareMessage = message; // ✅ Save for reuse
+  currentShareMessage = baseMessage; // Set default
 
   const isDesktop = !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   if (isDesktop) {
-    showShareModal(message);
+    showShareModal(baseMessage);
   } else {
-    if (navigator.share) {
-      navigator.share({ title: "WordBytes", text: message }).catch(() => console.log("Share canceled"));
-      setTimeout(showCustomShareOverlay, 100); // Optional: show X/FB buttons over native sheet
-    } else {
-      window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
-    }
+    // Mobile: Show custom modal for editing
+    showShareModal(baseMessage);
   }
 
+  // 🔍 GA4: Track share method
   gtag('event', 'share_action', {
-    'method': isDesktop ? 'desktop_modal' : navigator.share ? 'native' : 'whatsapp',
+    'method': isDesktop ? 'desktop_modal' : 'mobile_modal',
     'game_result': gameWon ? 'win' : 'loss',
     'streak_at_share': streak
   });
@@ -420,6 +418,11 @@ function shareOnWhatsApp() {
   window.open(`https://wa.me/?text=${message}`, '_blank');
 }
 
+function shareOnTelegram() {
+  const message = encodeURIComponent(currentShareMessage);
+  window.open(`https://t.me/share/url?url=https://wordbytes.app&text=${message}`, '_blank');
+}
+
 function copyToClipboard() {
   navigator.clipboard.writeText(currentShareMessage).then(
     () => {
@@ -433,7 +436,18 @@ function copyToClipboard() {
   );
 }
 
+function showShareModal(baseMessage) {
+  document.getElementById('share-modal').style.display = 'flex';
 
+  // Populate textarea with default message
+  const textarea = document.getElementById('custom-share-message');
+  textarea.value = baseMessage;
+
+  // Update currentShareMessage on input
+  textarea.addEventListener('input', () => {
+    currentShareMessage = textarea.value;
+  }, { once: true });
+}
 
 
 // Service Worker
