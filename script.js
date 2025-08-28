@@ -358,39 +358,52 @@ shareBtn.addEventListener("click", () => {
     'streak_at_share': streak
   });
 });
+// Store message for reuse
+let currentShareMessage = '';
 
-function showShareModal(shareText) {
-  const modal = document.getElementById('share-modal');
-  modal.style.display = 'flex';
-  window.currentShareText = shareText; // Store for reuse
+function showShareModal(message, encodedMessage, url) {
+  currentShareMessage = message;
+  document.getElementById('share-modal').style.display = 'flex';
+
+  // Optional: Pre-fill LinkedIn with better text
+  window.encodedMessageForSocials = encodedMessage;
+  window.urlForSocials = url;
 }
 
 function closeShareModal() {
   document.getElementById('share-modal').style.display = 'none';
 }
 
+// 🐦 Share on X (Twitter)
 function shareOnX() {
-  const text = encodeURIComponent(window.currentShareText);
-  window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank', 'width=600,height=400');
+  const tweet = `Check out WordBytes – a fun daily 6-letter word puzzle! ${window.encodedMessageForSocials}`;
+  window.open(`https://twitter.com/intent/tweet?text=${tweet}`, '_blank', 'width=600,height=400');
 }
 
+// 📘 Share on Facebook
 function shareOnFacebook() {
-  const url = encodeURIComponent('https://wordbytes.app');
-  window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=https://wordbytes.app&quote=${window.encodedMessageForSocials}`, '_blank', 'width=600,height=400');
 }
 
+// 💼 Share on LinkedIn
 function shareOnLinkedIn() {
-  const url = encodeURIComponent('https://wordbytes.app');
   const title = encodeURIComponent("I played WordBytes today!");
-  const summary = encodeURIComponent("A fun daily 6-letter word puzzle — free to play!");
-  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}&summary=${summary}`, '_blank', 'width=600,height=400');
+  const summary = window.encodedMessageForSocials;
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://wordbytes.app&title=${title}&summary=${summary}`, '_blank', 'width=600,height=400');
 }
 
+// 📋 Copy to Clipboard (your original fallback)
 function copyToClipboard() {
-  navigator.clipboard.writeText(window.currentShareText).then(() => {
-    alert("Result copied! 📲 Paste it anywhere!");
-    closeShareModal();
-  });
+  navigator.clipboard.writeText(currentShareMessage).then(
+    () => {
+      alert("Result copied! 📲 Paste it to share!");
+      closeShareModal();
+    },
+    () => {
+      prompt("Copy to share:", currentShareMessage);
+      closeShareModal();
+    }
+  );
 }
 
 // Service Worker
