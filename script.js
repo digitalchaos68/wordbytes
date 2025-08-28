@@ -397,10 +397,16 @@ function closeShareModal() {
 
 
 function shareOnX() {
-  const tweet = `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\n\nPlay free: https://wordbytes.app #WordBytes`;
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(currentShareMessage)} #WordBytes`, '_blank', 'width=600,height=400');
+  const fallback = "I just played WordBytes! A fun daily 6-letter word puzzle. Can you beat my score?";
+  const message = currentShareMessage || fallback;
+  const tweet = encodeURIComponent(message + " #WordBytes");
+  const url = `https://twitter.com/intent/tweet?text=${tweet}`;
+  
+  const popup = window.open(url, 'x_share', 'width=600,height=400');
+  if (!popup) {
+    alert("Please allow popups to share on X.");
+  }
 }
-
 function shareOnFacebook() {
   const message = encodeURIComponent(currentShareMessage);
   console.log("message:", message)
