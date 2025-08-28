@@ -642,3 +642,41 @@ body.dark-mode {
   line-height: 1.4;
   resize: vertical;
 }
+
+
+/* === SHARE MODAL DARK MODE === */
+.dark-mode .share-modal .modal-content,
+.dark-mode #share-modal > div {
+  background: #1e1e1e !important;
+  color: #e0e0e0 !important;
+}
+
+.dark-mode #share-modal h3,
+.dark-mode #share-modal p {
+  color: #e0e0e0 !important;
+}
+
+.dark-mode #custom-share-message {
+  background: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border-color: #444 !important;
+}
+
+.dark-mode #custom-share-message::placeholder {
+  color: #aaa !important;
+}
+
+/* Dark mode buttons */
+.dark-mode #social-buttons button {
+  background: #3a3a3a !important;
+  color: white !important;
+  border: none !important;
+}
+
+.dark-mode #social-buttons button:hover {
+  opacity: 0.9 !important;
+}
+
+.dark-mode #share-modal button[onclick="closeShareModal()"] {
+  background: #555 !important;
+}

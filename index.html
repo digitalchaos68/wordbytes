@@ -155,14 +155,12 @@
 
 
 <!-- SHARE MODAL -->
-<div id="share-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+<div id="share-modal" class="share-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
   <div style="background: white; padding: 20px; border-radius: 12px; width: 90%; max-width: 500px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
     <h3>Share Your Result</h3>
     <p>Challenge your friends!</p>
-
     <!-- Custom Message Input -->
     <textarea id="custom-share-message" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 10px; font-family: monospace; font-size: 14px;"></textarea>
-
     <!-- Social Buttons -->
     <div id="social-buttons" style="margin: 15px 0;">
       <button onclick="shareOnX()" style="background: #1DA1F2; color: white; border: none; padding: 10px 15px; margin: 5px; border-radius: 6px; cursor: pointer;">🐦 X</button>
@@ -172,7 +170,8 @@
       <button onclick="shareOnLinkedIn()" style="background: #0077b5; color: white; border: none; padding: 10px 15px; margin: 5px; border-radius: 6px; cursor: pointer;">💼 LinkedIn</button>
       <button onclick="copyToClipboard()" style="background: #28a745; color: white; border: none; padding: 10px 15px; margin: 5px; border-radius: 6px; cursor: pointer;">📋 Copy</button>
     </div>
-    <button onclick="closeShareModal()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Close</button>  </div>
+    <button onclick="closeShareModal()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Close</button>
+  </div>
 </div>
 
 </body>
