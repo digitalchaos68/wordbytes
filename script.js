@@ -61,6 +61,12 @@ document.querySelectorAll('.key').forEach(button => {
   button.addEventListener('click', () => onKeyClick(key));
 });
 
+function getDayOfYear() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  return Math.floor((now - start) / 86400000);
+}
+
 function onKeyClick(key) {
   if (gameOver) return;
 
@@ -72,10 +78,30 @@ function onKeyClick(key) {
   if (!bgMusic.isPlaying) {
     bgMusic.play().catch(e => console.log("Music autoplay blocked"));
     bgMusic.isPlaying = true;
+
+  // 🔍 GA4: Track first interaction → game session start
+  gtag('event', 'session_start', {
+    'session_number': streak + 1  // approximate
+  });
+
+  // 🔍 GA4: Track level start
+  gtag('event', 'level_start', {
+    'level': getDayOfYear(),  // helper below
+    'puzzle_type': 'daily_6letter'
+  });
+
   }
 
   // Play tap sound
   playSound("tap");
+
+// 🔍 GA4: Track typing engagement
+if (key.length === 1) {
+  gtag('event', 'letter_input', {
+    'letter': key,
+    'position': currentGuess.length + 1
+  });
+}
 
   if (key === "ENTER") {
     if (currentGuess.length !== WORD_LENGTH) {
@@ -97,6 +123,13 @@ function checkGuess() {
   const currentRowEl = rows[currentRow];
   const letters = currentRowEl.children;
   let solutionArray = SOLUTION.split("");
+
+// 🔍 GA4: Track attempt
+gtag('event', 'guess_submitted', {
+  'attempt_number': currentRow + 1,
+  'word_guess': currentGuess,
+  'is_correct': currentGuess === SOLUTION
+});
 
   // Mark correct (green)
   for (let i = 0; i < WORD_LENGTH; i++) {
@@ -125,6 +158,19 @@ function checkGuess() {
     streak++;
     localStorage.setItem("wordBytesStreak", streak);
     updateStreak();
+
+// 🔍 GA4: Track win & streak
+gtag('event', 'level_complete', {
+  'level': getDayOfYear(),
+  'moves': currentRow + 1,
+  'hints_used': 0, // we’ll update this if hint was used
+  'result': 'win'
+});
+
+gtag('event', 'streak_updated', {
+  'streak_count': streak
+});
+    
     playSound("win");
     bgMusic.volume = 0.05;
     setTimeout(() => { bgMusic.volume = 0.2; }, 1000);
@@ -136,6 +182,19 @@ function checkGuess() {
     streak = 0;
     localStorage.setItem("wordBytesStreak", 0);
     updateStreak();
+
+// 🔍 GA4: Track loss
+gtag('event', 'level_complete', {
+  'level': getDayOfYear(),
+  'moves': MAX_ATTEMPTS,
+  'result': 'loss'
+});
+
+gtag('event', 'streak_reset', {
+  'previous_streak': parseInt(localStorage.getItem("wordBytesStreak")) || 0
+});
+
+
     playSound("fail");
     alert(`💔 Tough one today! The word was: ${SOLUTION}\n\nThanks for playing! Share your result and come back tomorrow for a new challenge! 🌟`);
     setTimeout(() => shareBtn.click(), 1000);
@@ -252,6 +311,14 @@ shareBtn.addEventListener("click", () => {
 
   if (navigator.share) {
     navigator.share({ title: "WordBytes", text: message }).catch(() => console.log("Share canceled"));
+
+gtag('event', 'share_action', {
+  'method': navigator.share ? 'native' : 
+           /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'whatsapp' : 'clipboard',
+  'game_result': gameWon ? 'win' : 'loss',
+  'streak_at_share': streak
+});    
+
   } else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
   } else {
@@ -259,6 +326,14 @@ shareBtn.addEventListener("click", () => {
       () => alert("Result copied! 📲 Paste it to share!"),
       () => prompt("Copy to share:", message)
     );
+
+gtag('event', 'share_action', {
+  'method': navigator.share ? 'native' : 
+           /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'whatsapp' : 'clipboard',
+  'game_result': gameWon ? 'win' : 'loss',
+  'streak_at_share': streak
+});    
+
   }
 });
 
@@ -315,6 +390,12 @@ hintBtn.addEventListener("click", () => {
   const confirmed = confirm("🎯 Watch a short ad to get a hint? (Close the popup to return)");
   if (!confirmed) return; // If they cancel, do nothing
 
+  // 🔍 GA4: Track intent to watch ad
+gtag('event', 'ad_click', {
+  'ad_type': 'rewarded_popup',
+  'placement': 'hint_button'
+});
+
   // Open ad in popup window
   const adPopup = window.open(
     'https://otieu.com/4/9777670',
@@ -337,6 +418,35 @@ hintBtn.addEventListener("click", () => {
       const randomIndex = Math.floor(Math.random() * WORD_LENGTH);
       const hintLetter = SOLUTION[randomIndex];
       alert(`💡 The word contains the letter '${hintLetter}'.`);
+
+// 🔍 GA4: Track ad completion (user closed popup = assumed view)
+gtag('event', 'rewarded_ad_viewed', {
+  'reward': 'hint_letter',
+  'value': 1
+});
+
+// 🔍 GA4: Track hint used
+gtag('event', 'hint_used', {
+  'hint_type': 'letter_hint',
+  'source': 'ad'
+});
+
+
     }
   }, 500);
+});
+
+// Detect install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  gtag('event', 'pwa_install_prompt', {
+    'outcome': 'shown'
+  });
+});
+
+// Detect actual install
+window.addEventListener('appinstalled', () => {
+  gtag('event', 'pwa_installed');
 });
