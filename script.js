@@ -1,3 +1,5 @@
+let currentShareMessage = '';
+
 // Word list (6-letter words)
 const WORD_LIST = [
   "planet", "bright", "crunch", "glider", "mystery", "flavor", "beacon", "jungle",
@@ -307,6 +309,41 @@ window.addEventListener('load', () => {
   }, 1500);
 });
 
+
+// === OVERRIDE NATIVE SHARE SHEET WITH CUSTOM BUTTONS ===
+function showCustomShareOverlay() {
+  // Create overlay div
+  const overlay = document.createElement('div');
+  overlay.id = 'custom-share-overlay';
+  overlay.style.cssText = `
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 999999;
+    font-family: sans-serif;
+    text-align: center;
+    max-width: 300px;
+    margin-top: 100px;
+  `;
+
+  // Add buttons
+  overlay.innerHTML = `
+    <button onclick="shareOnX()" style="background: #1DA1F2; color: white; border: none; padding: 6px 12px; margin: 4px; border-radius: 4px; cursor: pointer;">🐦 X</button>
+    <button onclick="shareOnFacebook()" style="background: #1877F2; color: white; border: none; padding: 6px 12px; margin: 4px; border-radius: 4px; cursor: pointer;">📘 Facebook</button>
+    <button onclick="shareOnLinkedIn()" style="background: #0077b5; color: white; border: none; padding: 6px 12px; margin: 4px; border-radius: 4px; cursor: pointer;">💼 LinkedIn</button>
+    <button onclick="copyToClipboard()" style="background: #28a745; color: white; border: none; padding: 6px 12px; margin: 4px; border-radius: 4px; cursor: pointer;">📋 Copy</button>
+    <button onclick="document.getElementById('custom-share-overlay').remove()" style="background: #6c757d; color: white; border: none; padding: 6px 12px; margin: 4px; border-radius: 4px; cursor: pointer;">Close</button>
+  `;
+
+  document.body.appendChild(overlay);
+}
+
+
 // === SMART SHARE BUTTON ===
 shareBtn.addEventListener("click", () => {
   const rows = gameboard.children;
@@ -324,35 +361,33 @@ shareBtn.addEventListener("click", () => {
   }
 
   const message = gameWon
-    ? `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app  `
-    : `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app  `;
+    ? `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app`
+    : `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app`;
 
-  // ✅ Check if it's desktop (no native share needed)
+  currentShareMessage = message; // ✅ Save for reuse
+
   const isDesktop = !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   if (isDesktop) {
-    // Always show custom modal on desktop
     showShareModal(message);
   } else {
-    // Mobile: Use native share or WhatsApp fallback
     if (navigator.share) {
       navigator.share({ title: "WordBytes", text: message }).catch(() => console.log("Share canceled"));
+      setTimeout(showCustomShareOverlay, 100); // Optional: show X/FB buttons over native sheet
     } else {
       window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
     }
   }
 
-  // 🔍 GA4: Track share method
-  const method = isDesktop ? 'desktop_modal' : navigator.share ? 'native' : 'whatsapp';
   gtag('event', 'share_action', {
-    'method': method,
+    'method': isDesktop ? 'desktop_modal' : navigator.share ? 'native' : 'whatsapp',
     'game_result': gameWon ? 'win' : 'loss',
     'streak_at_share': streak
   });
 });
 
 // Store message for reuse
-let currentShareMessage = '';
+
 function showShareModal(message) {
   document.getElementById('share-modal').style.display = 'flex';
   window.currentShareMessage = message;
@@ -363,8 +398,11 @@ function closeShareModal() {
 }
 
 function shareOnX() {
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(currentShareMessage)} #WordBytes`, '_blank', 'width=600,height=400');
+}
+function shareOnX() {
   const tweet = `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\n\nPlay free: https://wordbytes.app #WordBytes`;
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweet)}`, '_blank', 'width=600,height=400');
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(currentShareMessage)} #WordBytes`, '_blank', 'width=600,height=400');
 }
 
 function shareOnFacebook() {
@@ -389,6 +427,9 @@ function copyToClipboard() {
     }
   );
 }
+
+
+
 
 // Service Worker
 if ('serviceWorker' in navigator) {
