@@ -415,6 +415,11 @@ function shareOnLinkedIn() {
   window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://wordbytes.app&title=${title}&summary=${summary}`, '_blank', 'width=600,height=400');
 }
 
+function shareOnWhatsApp() {
+  const message = encodeURIComponent(currentShareMessage);
+  window.open(`https://wa.me/?text=${message}`, '_blank');
+}
+
 function copyToClipboard() {
   navigator.clipboard.writeText(currentShareMessage).then(
     () => {
