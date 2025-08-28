@@ -96,7 +96,7 @@ function onKeyClick(key) {
   playSound("tap");
 
 // 🔍 GA4: Track typing engagement
-if (key.length === 1) {
+if (key.length === 1 && key >= 'A' && key <= 'Z') {
   gtag('event', 'letter_input', {
     'letter': key,
     'position': currentGuess.length + 1
@@ -117,6 +117,24 @@ if (key.length === 1) {
     letters[currentGuess.length - 1].textContent = key;
   }
 }
+
+// === PHYSICAL KEYBOARD SUPPORT ===
+document.addEventListener('keydown', (e) => {
+  if (gameOver) return;
+
+  const key = e.key.toUpperCase();
+
+  // Only handle valid inputs
+  if (key >= 'A' && key <= 'Z' && key.length === 1) {
+    onKeyClick(key);
+  } else if (key === 'ENTER') {
+    onKeyClick('ENTER');
+  } else if (key === 'BACKSPACE' || key === 'DELETE') {
+    onKeyClick('⌫');
+  }
+});
+
+
 
 function checkGuess() {
   const rows = gameboard.children;
@@ -306,35 +324,31 @@ shareBtn.addEventListener("click", () => {
   }
 
   const message = gameWon
-    ? `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app`
-    : `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app`;
+    ? `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app  `
+    : `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app  `;
+
+  let method;
 
   if (navigator.share) {
     navigator.share({ title: "WordBytes", text: message }).catch(() => console.log("Share canceled"));
-
-gtag('event', 'share_action', {
-  'method': navigator.share ? 'native' : 
-           /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'whatsapp' : 'clipboard',
-  'game_result': gameWon ? 'win' : 'loss',
-  'streak_at_share': streak
-});    
-
+    method = 'native';
   } else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+    method = 'whatsapp';
   } else {
     navigator.clipboard.writeText(message).then(
       () => alert("Result copied! 📲 Paste it to share!"),
       () => prompt("Copy to share:", message)
     );
-
-gtag('event', 'share_action', {
-  'method': navigator.share ? 'native' : 
-           /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'whatsapp' : 'clipboard',
-  'game_result': gameWon ? 'win' : 'loss',
-  'streak_at_share': streak
-});    
-
+    method = 'clipboard';
   }
+
+  // 🔍 GA4: Track share
+  gtag('event', 'share_action', {
+    'method': method,
+    'game_result': gameWon ? 'win' : 'loss',
+    'streak_at_share': streak
+  });
 });
 
 // Service Worker
