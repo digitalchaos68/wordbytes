@@ -403,6 +403,7 @@ function shareOnX() {
 
 function shareOnFacebook() {
   const message = encodeURIComponent(currentShareMessage);
+  console.log("message:", message)
   window.open(`https://www.facebook.com/sharer/sharer.php?u=https://wordbytes.app&t=${message}`, '_blank');
 }
 
@@ -410,7 +411,7 @@ function shareOnLinkedIn() {
   const message = encodeURIComponent(currentShareMessage);
   const title = encodeURIComponent("I played WordBytes today!");
   const summary = encodeURIComponent("A fun daily 6-letter word puzzle — free to play!");
-  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://wordbytes.app&title=${title}&summary=${summary}`, '_blank');
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://wordbytes.app&title=${title}&summary=${message}`, '_blank');
 }
 
 function shareOnWhatsApp() {
