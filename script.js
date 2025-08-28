@@ -323,31 +323,41 @@ shareBtn.addEventListener("click", () => {
     if (row.trim()) grid += row + "\n";
   }
 
-  const isWin = gameWon;
-  const attempts = currentRow + 1;
-  const emojiResult = isWin
-    ? `I cracked today’s WordByte in ${attempts} ${attempts === 1 ? 'try' : 'tries'}! 🎉\n\n${grid}`
-    : `Tried today’s WordByte — tough one! 💔\n\n${grid}`;
+  // ✅ Use your original win/loss message format
+  const message = gameWon
+    ? `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\nPlay free: https://wordbytes.app  `
+    : `Tried today’s WordByte — tough one! 💔\nCan you do better?\n\n${grid}\nGive it a try: https://wordbytes.app  `;
 
-  const shareText = `${emojiResult}\nPlay free: https://wordbytes.app`;
+  // 🔗 URL-encode for social links
+  const encodedMessage = encodeURIComponent(message);
+  const url = encodeURIComponent('https://wordbytes.app');
 
-  // Open share menu based on platform
-  if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    // Mobile: Use native share
-    navigator.share({ title: "WordBytes", text: shareText });
+  // 📱 MOBILE: Use native share or WhatsApp
+  if (navigator.share) {
+    navigator.share({ title: "WordBytes", text: message }).catch(() => console.log("Share canceled"));
+  } else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
   } else {
-    // Desktop: Show custom share modal or open social links
-    showShareModal(shareText);
+    // 💻 DESKTOP: Show modal with ALL options (keep clipboard + add social)
+    showShareModal(message, encodedMessage, url);
   }
 
-  // 🔍 GA4: Track share (same as before)
+  // 🔍 GA4: Track share (method depends on platform)
+  let shareMethod;
+  if (navigator.share) {
+    shareMethod = 'native';
+  } else if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    shareMethod = 'whatsapp';
+  } else {
+    shareMethod = 'desktop_modal';
+  }
+
   gtag('event', 'share_action', {
-    'method': navigator.share ? 'native' : 'social_modal',
-    'game_result': isWin ? 'win' : 'loss',
+    'method': shareMethod,
+    'game_result': gameWon ? 'win' : 'loss',
     'streak_at_share': streak
   });
 });
-
 
 function showShareModal(shareText) {
   const modal = document.getElementById('share-modal');
