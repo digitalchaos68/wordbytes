@@ -395,22 +395,22 @@ function closeShareModal() {
   document.getElementById('share-modal').style.display = 'none';
 }
 
-function shareOnX() {
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(currentShareMessage)} #WordBytes`, '_blank', 'width=600,height=400');
-}
+
 function shareOnX() {
   const tweet = `I cracked today’s WordByte in ${currentRow + 1} ${currentRow === 0 ? 'try' : 'tries'}! 🎉\n\n${grid}\n\nPlay free: https://wordbytes.app #WordBytes`;
   window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(currentShareMessage)} #WordBytes`, '_blank', 'width=600,height=400');
 }
 
 function shareOnFacebook() {
-  window.open(`https://www.facebook.com/sharer/sharer.php?u=https://wordbytes.app&quote=${encodeURIComponent(currentShareMessage)}`, '_blank', 'width=600,height=400');
+  const message = encodeURIComponent(currentShareMessage);
+  window.open(`https://www.facebook.com/sharer/sharer.php?u=https://wordbytes.app&t=${message}`, '_blank');
 }
 
 function shareOnLinkedIn() {
+  const message = encodeURIComponent(currentShareMessage);
   const title = encodeURIComponent("I played WordBytes today!");
-  const summary = encodeURIComponent(currentShareMessage);
-  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://wordbytes.app&title=${title}&summary=${summary}`, '_blank', 'width=600,height=400');
+  const summary = encodeURIComponent("A fun daily 6-letter word puzzle — free to play!");
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=https://wordbytes.app&title=${title}&summary=${summary}`, '_blank');
 }
 
 function shareOnWhatsApp() {
