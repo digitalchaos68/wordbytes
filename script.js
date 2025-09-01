@@ -2,8 +2,8 @@ let currentShareMessage = '';
 
 // Word list (6-letter words)
 const WORD_LIST = [
-  "planet", "bright", "crunch", "glider", "mystery", "flavor", "beacon", "jungle",
-  "fossil", "thrive", "quartz", "violet", "wobble", "glisten", "briskly", "jumped",
+  "planet", "bright", "crunch", "glider", "master", "flavor", "beacon", "jungle",
+  "fossil", "thrive", "quartz", "violet", "wobble", "listen", "bistro", "jumped",
   "frozen", "closet", "prayer", "guitar"
 ];
 
