@@ -77,7 +77,7 @@ function onKeyClick(key) {
   const letters = currentRowEl.children;
 
   // Start music on first interaction
-  if (!bgMusic.isPlaying ) {
+  if (!bgMusic.isPlaying && !isMuted) {
     bgMusic.play().catch(e => console.log("Music autoplay blocked"));
     bgMusic.isPlaying = true;
 
