@@ -8,7 +8,6 @@ const WORD_LIST = [
 ];
 
 // === BACKGROUND MUSIC ===
-if (isMuted) return;
 let bgMusic = new Audio("sounds/background.mp3");
 bgMusic.loop = true;
 bgMusic.volume = 0.2;
