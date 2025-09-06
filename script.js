@@ -93,6 +93,8 @@ function onKeyClick(key) {
   });
 
   }
+  
+  if (isMuted) bgMusic.pause();
 
   // Play tap sound
   playSound("tap");
