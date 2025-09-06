@@ -306,8 +306,8 @@ const splashScreen = document.getElementById("splash-screen");
 window.addEventListener('load', () => {
   setTimeout(() => {
     splashScreen.classList.add('fade-out');
-    setTimeout(() => splashScreen.style.display = 'none', 1000);
-  }, 1500);
+    setTimeout(() => splashScreen.style.display = 'none', 500);
+  }, 100);
 });
 
 
