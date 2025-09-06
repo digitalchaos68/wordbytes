@@ -8,6 +8,7 @@ const WORD_LIST = [
 ];
 
 // === BACKGROUND MUSIC ===
+if (isMuted) return;
 let bgMusic = new Audio("sounds/background.mp3");
 bgMusic.loop = true;
 bgMusic.volume = 0.2;
@@ -77,7 +78,7 @@ function onKeyClick(key) {
   const letters = currentRowEl.children;
 
   // Start music on first interaction
-  if (!bgMusic.isPlaying && !isMuted) {
+  if (!bgMusic.isPlaying ) {
     bgMusic.play().catch(e => console.log("Music autoplay blocked"));
     bgMusic.isPlaying = true;
 
